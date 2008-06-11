@@ -5,7 +5,7 @@ Summary: Global Information Tracker
 Name: git
 Epoch: 1
 Version: 1.5.4.3
-Release: %mkrel 2
+Release: %mkrel 3
 Source0: http://www.kernel.org/pub/software/scm/git/git-%{version}.tar.bz2
 Source1: http://www.kernel.org/pub/software/scm/git/git-%{version}.tar.bz2.sign
 Source2: gitweb.conf
@@ -28,9 +28,8 @@ Requires: git-cvs = %{version}
 Requires: git-email = %{version}
 Requires: git-arch = %{version}
 Requires: git-core-oldies = %{version}
-Obsoletes: linus-git <= 1.5.4.3-1mdv
+Obsoletes: linus-git < 1.5.4.3-2
 Provides: linus-git
-Conflicts: git <= 4.3.20-15mdv
 
 %description
 This is a stupid (but extremely fast) directory content manager.  It
@@ -51,7 +50,7 @@ Requires: rsync
 Requires: less
 Requires: openssh-clients
 Requires: curl
-Conflicts: git <= 4.3.20-15mdv
+Conflicts: git < 4.3.20-15
 
 %description -n git-core
 This is a stupid (but extremely fast) directory content manager.  It
