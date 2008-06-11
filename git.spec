@@ -1,0 +1,321 @@
+
+%define libname %mklibname git
+
+Summary: Global Information Tracker
+Name: git
+Epoch: 1
+Version: 1.5.4.3
+Release: %mkrel 2
+Source0: http://www.kernel.org/pub/software/scm/git/git-%{version}.tar.bz2
+Source1: http://www.kernel.org/pub/software/scm/git/git-%{version}.tar.bz2.sign
+Source2: gitweb.conf
+License: GPLv2
+Group: Development/Other
+Url: http://git.or.cz/
+BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-buildroot
+BuildRequires: openssl-devel
+BuildRequires: zlib-devel
+BuildRequires: curl-devel
+BuildRequires: expat-devel
+BuildRequires: asciidoc
+BuildRequires: xmlto
+BuildRequires: dos2unix
+BuildRequires: perl-CGI
+Requires: git-core = %{version}
+Requires: gitk = %{version}
+Requires: git-svn = %{version}
+Requires: git-cvs = %{version}
+Requires: git-email = %{version}
+Requires: git-arch = %{version}
+Requires: git-core-oldies = %{version}
+Obsoletes: linus-git <= 1.5.4.3-1mdv
+Provides: linus-git
+Conflicts: git <= 4.3.20-15mdv
+
+%description
+This is a stupid (but extremely fast) directory content manager.  It
+doesn't do a whole lot, but what it _does_ do is track directory
+contents efficiently. It is intended to be the base of an efficient,
+distributed source code management system. This package includes
+rudimentary tools that can be used as a SCM, but you should look
+elsewhere for tools for ordinary humans layered on top of this.
+
+This is a dummy package which brings in all subpackages.
+
+
+%package -n git-core
+Summary: Global Information Tracker
+Group: Development/Other
+Requires: diffutils
+Requires: rsync
+Requires: less
+Requires: openssh-clients
+Requires: curl
+Conflicts: git <= 4.3.20-15mdv
+
+%description -n git-core
+This is a stupid (but extremely fast) directory content manager.  It
+doesn't do a whole lot, but what it _does_ do is track directory
+contents efficiently. It is intended to be the base of an efficient,
+distributed source code management system. This package includes
+rudimentary tools that can be used as a SCM, but you should look
+elsewhere for tools for ordinary humans layered on top of this.
+
+This are the core tools with minimal dependencies.
+
+You may want to install subversion, cpsps and/or tla to import
+repositories from other VCS.
+
+
+%package -n gitk
+Summary: Git revision tree visualiser
+Group: Development/Other
+Requires: git-core = %{version}
+Requires: tk >= 8.4
+Requires: tcl >= 8.4
+
+%description -n gitk
+Git revision tree visualiser.
+
+%package -n gitview
+Summary: Git graphical revision tree visualiser
+Group: Development/Other
+Requires: git-core = %{version}
+Requires: python-cairo
+Requires: pygtk2.0
+
+%description -n gitview
+Git graphical revision tree visualiser.
+
+%package -n %libname-devel	
+Summary: Git development files	
+Group: Development/Other	
+Provides: git-devel = %version-%release	
+ 	 	
+%description -n %libname-devel	
+Development files for git.
+
+%package -n git-svn
+Summary:        Git tools for importing Subversion repositories
+Group:          Development/Other
+Requires:       git-core = %{version}-%{release}, subversion
+%description -n git-svn
+Git tools for importing Subversion repositories.
+
+%package -n git-cvs
+Summary:        Git tools for importing CVS repositories
+Group:          Development/Other
+Requires:       git-core = %{version}-%{release}, cvs, cvsps
+%description -n git-cvs
+Git tools for importing CVS repositories.
+
+%package -n git-arch
+Summary:        Git tools for importing Arch repositories
+Group:          Development/Other
+Requires:       git-core = %{version}-%{release}, tla
+%description -n git-arch
+Git tools for importing Arch repositories.
+
+%package -n git-email
+Summary:        Git tools for sending email
+Group:          Development/Other
+Requires:       git-core = %{version}-%{release}
+%description -n git-email
+Git tools for sending email.
+
+%package -n perl-Git
+Summary:        Perl interface to Git
+Group:          Development/Perl
+Requires:       git-core = %{version}-%{release}
+
+%description -n perl-Git
+Perl interface to Git
+
+%package -n git-core-oldies
+Summary:	Git obsolete commands, bound to extinction
+Group:		Development/Other
+Requires:	git-core = %{version}-%{release}
+
+%description -n git-core-oldies
+Git obsolete commands, bound to extinction
+
+%package -n gitweb
+Summary:	cgi-bin script for browse a git repository with web browser
+Group:		System/Servers
+Requires:	git-core = %{version}-%{release}
+
+%description -n gitweb
+cgi-bin script for browse a git repository with web browser.
+
+%prep
+%setup -q -n git-%{version}
+# remove borring file
+rm -f Documentation/.gitignore
+# prefix gitweb css/png files with /gitweb
+perl -pi -e 's!^(GITWEB_CSS|GITWEB_LOGO|GITWEB_FAVICON) = !$1 = /gitweb/!' Makefile
+
+%build
+%make prefix=%{_prefix} CFLAGS="$RPM_OPT_FLAGS" GITWEB_CONFIG=%{_sysconfdir}/gitweb.conf all doc gitweb/gitweb.cgi
+
+# convert end of line to make rpmlint happy
+dos2unix Documentation/*.html
+
+%install
+rm -rf $RPM_BUILD_ROOT
+mkdir -p $RPM_BUILD_ROOT%{_bindir}
+%makeinstall_std prefix=%{_prefix} CFLAGS="$RPM_OPT_FLAGS"
+make install-doc prefix=%{_prefix} DESTDIR=$RPM_BUILD_ROOT
+install -m 755 contrib/gitview/gitview %buildroot%{_bindir}
+
+mkdir -p %{buildroot}%{_includedir}/git
+cp *.h %{buildroot}%{_includedir}/git
+
+mkdir -p %{buildroot}%{_libdir}
+install -m 644 libgit.a %buildroot%{_libdir}/libgit.a
+
+mv %{buildroot}/%{_prefix}/lib/perl5/site_perl %{buildroot}/%{_prefix}/lib/perl5/vendor_perl
+rm -f %{buildroot}/%{perl_vendorlib}/Error.pm
+
+mkdir -p %{buildroot}%{_var}/www/cgi-bin/gitweb/
+cp gitweb/gitweb.cgi %{buildroot}%{_var}/www/cgi-bin/
+mkdir -p %{buildroot}%{_var}/www/gitweb/
+cp gitweb/*.css gitweb/*.png %{buildroot}%{_var}/www/gitweb
+mkdir -p %{buildroot}%{_sysconfdir}
+install -m644 %{SOURCE2} %{buildroot}%{_sysconfdir}/gitweb.conf
+# apache configuration
+mkdir -p %{buildroot}%{_webappconfdir}
+cat > %{buildroot}%{_webappconfdir}/gitweb.conf <<EOF
+# gitweb configuration
+Alias /gitweb %{_var}/www/gitweb
+
+<Directory %{_var}/www/gitweb>
+    Allow from all
+</Directory>
+EOF
+
+# fix .sp in man files
+find %{buildroot}/%{_mandir} -type f | xargs perl -e 's/\.sp$/\n\.sp/g' -pi
+
+# emacs VC backend:
+mkdir -p %{buildroot}{%_datadir/emacs/site-lisp,/etc/emacs/site-start.d}
+install -m 644 contrib/emacs/*.el %{buildroot}%_datadir/emacs/site-lisp
+cat >%{buildroot}/etc/emacs/site-start.d/vc_git.el <<EOF
+(add-to-list 'vc-handled-backends 'GIT)
+EOF
+
+# install bash-completion file
+mkdir -p  %{buildroot}%_sysconfdir/bash_completion.d
+install -m644 contrib/completion/git-completion.bash %{buildroot}%_sysconfdir/bash_completion.d/
+
+# install VIM syntax file
+mkdir -p %{buildroot}%_datadir/vim/syntax
+install -m644 contrib/vim/syntax/gitcommit.vim %{buildroot}%_datadir/vim/syntax
+cp contrib/vim/README contrib/vim/README.vim
+
+%check
+LC_ALL=C make test prefix=%{_prefix} CFLAGS="$RPM_OPT_FLAGS"
+
+%clean
+rm -rf $RPM_BUILD_ROOT
+
+%post -n gitweb
+%{_post_webapp}
+
+%postun -n gitweb
+%{_postun_webapp}
+
+%files
+# no file in the main package
+
+%files -n git-core
+%defattr(-,root,root,0755)
+/etc/emacs/site-start.d/*
+/etc/bash_completion.d/*
+%_datadir/emacs/site-lisp/*
+%_datadir/vim/syntax/*
+%{_bindir}/git
+%{_bindir}/git-*
+%exclude %{_bindir}/*svn*
+%exclude %{_bindir}/*cvs*
+%exclude %{_bindir}/git-archimport
+%exclude %{_bindir}/*email*
+# %exclude %{_bindir}/git-merge-recursive-old
+%{_datadir}/git-core
+%{_datadir}/git-gui
+# %exclude %{_datadir}/git-core/python
+%{_mandir}/*/git-*
+%{_mandir}/*/git.*
+%{_mandir}/*/gitattributes*
+%{_mandir}/*/gitignore*
+%{_mandir}/*/gitmodules*
+%{_mandir}/*/gitcli*
+%exclude %{_mandir}/man1/*svn*.1*
+%exclude %{_mandir}/man1/*cvs*.1*
+%exclude %{_mandir}/man1/*email*.1*
+%exclude %{_mandir}/man1/git-archimport.1*
+%doc README Documentation/*.html Documentation/howto Documentation/technical contrib/vim/README.vim
+
+%files -n gitk
+%defattr(-,root,root,0755)
+%{_bindir}/gitk
+%{_mandir}/*/gitk*
+%{_datadir}/gitk
+%doc README
+
+%files -n gitview
+%defattr(-,root,root,0755)
+%doc contrib/gitview/gitview.txt
+%{_bindir}/gitview
+
+%files -n %{libname}-devel	
+%defattr(-,root,root,0755)
+%{_includedir}/git
+%{_libdir}/libgit.a
+
+%files -n git-svn
+%defattr(-,root,root)
+%{_bindir}/*svn*
+%{_mandir}/man1/*svn*.1*
+# %doc Documentation/*svn*.txt
+# %doc Documentation/*svn*.html
+
+%files -n git-cvs
+%defattr(-,root,root)
+%{_bindir}/*cvs*
+%{_mandir}/man1/*cvs*.1*
+# %doc Documentation/*git-cvs*.txt
+# %doc Documentation/*git-cvs*.html
+
+%files -n git-arch
+%defattr(-,root,root)
+%{_bindir}/git-archimport
+%{_mandir}/man1/git-archimport.1*
+# %doc Documentation/git-archimport.txt
+# %doc Documentation/git-archimport.html
+
+%files -n git-email
+%defattr(-,root,root)
+%{_bindir}/*email*
+%{_mandir}/man1/*email*.1*
+# %doc Documentation/*email*.txt
+# %doc Documentation/*email*.html
+
+%files -n perl-Git
+%defattr(-,root,root)
+%{perl_vendorlib}/*
+%{_mandir}/man3/*
+# /usr/lib/perl5/site_perl/5.8.8/Git.pm
+# /usr/local/share/man/man3/Git.3pm
+
+%files -n git-core-oldies
+%defattr(-,root,root,0755)
+# %{_bindir}/git-merge-recursive-old
+# %{_datadir}/git-core/python
+
+%files -n gitweb
+%defattr(-,root,root,0755)
+%doc gitweb/INSTALL gitweb/README
+%config(noreplace) %{_sysconfdir}/gitweb.conf
+%config(noreplace) %{_webappconfdir}/gitweb.conf
+%{_var}/www/cgi-bin/gitweb.cgi
+%{_var}/www/gitweb
