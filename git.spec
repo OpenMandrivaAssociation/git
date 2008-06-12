@@ -5,7 +5,7 @@ Summary: Global Information Tracker
 Name: git
 Epoch: 1
 Version: 1.5.4.3
-Release: %mkrel 3
+Release: %mkrel 4
 Source0: http://www.kernel.org/pub/software/scm/git/git-%{version}.tar.bz2
 Source1: http://www.kernel.org/pub/software/scm/git/git-%{version}.tar.bz2.sign
 Source2: gitweb.conf
@@ -21,13 +21,13 @@ BuildRequires: asciidoc
 BuildRequires: xmlto
 BuildRequires: dos2unix
 BuildRequires: perl-CGI
-Requires: git-core = %{version}
-Requires: gitk = %{version}
-Requires: git-svn = %{version}
-Requires: git-cvs = %{version}
-Requires: git-email = %{version}
-Requires: git-arch = %{version}
-Requires: git-core-oldies = %{version}
+Requires: git-core = %{epoch}:%{version}
+Requires: gitk = %{epoch}:%{version}
+Requires: git-svn = %{epoch}:%{version}
+Requires: git-cvs = %{epoch}:%{version}
+Requires: git-email = %{epoch}:%{version}
+Requires: git-arch = %{epoch}:%{version}
+Requires: git-core-oldies = %{epoch}:%{version}
 Obsoletes: linus-git < 1.5.4.3-2
 Provides: linus-git
 
@@ -69,7 +69,7 @@ repositories from other VCS.
 %package -n gitk
 Summary: Git revision tree visualiser
 Group: Development/Other
-Requires: git-core = %{version}
+Requires: git-core = %{epoch}:%{version}
 Requires: tk >= 8.4
 Requires: tcl >= 8.4
 
@@ -79,7 +79,7 @@ Git revision tree visualiser.
 %package -n gitview
 Summary: Git graphical revision tree visualiser
 Group: Development/Other
-Requires: git-core = %{version}
+Requires: git-core = %{epoch}:%{version}
 Requires: python-cairo
 Requires: pygtk2.0
 
@@ -97,35 +97,35 @@ Development files for git.
 %package -n git-svn
 Summary:        Git tools for importing Subversion repositories
 Group:          Development/Other
-Requires:       git-core = %{version}-%{release}, subversion
+Requires:       git-core = %{epoch}:%{version}-%{release}, subversion
 %description -n git-svn
 Git tools for importing Subversion repositories.
 
 %package -n git-cvs
 Summary:        Git tools for importing CVS repositories
 Group:          Development/Other
-Requires:       git-core = %{version}-%{release}, cvs, cvsps
+Requires:       git-core = %{epoch}:%{version}-%{release}, cvs, cvsps
 %description -n git-cvs
 Git tools for importing CVS repositories.
 
 %package -n git-arch
 Summary:        Git tools for importing Arch repositories
 Group:          Development/Other
-Requires:       git-core = %{version}-%{release}, tla
+Requires:       git-core = %{epoch}:%{version}-%{release}, tla
 %description -n git-arch
 Git tools for importing Arch repositories.
 
 %package -n git-email
 Summary:        Git tools for sending email
 Group:          Development/Other
-Requires:       git-core = %{version}-%{release}
+Requires:       git-core = %{epoch}:%{version}-%{release}
 %description -n git-email
 Git tools for sending email.
 
 %package -n perl-Git
 Summary:        Perl interface to Git
 Group:          Development/Perl
-Requires:       git-core = %{version}-%{release}
+Requires:       git-core = %{epoch}:%{version}-%{release}
 
 %description -n perl-Git
 Perl interface to Git
@@ -133,7 +133,7 @@ Perl interface to Git
 %package -n git-core-oldies
 Summary:	Git obsolete commands, bound to extinction
 Group:		Development/Other
-Requires:	git-core = %{version}-%{release}
+Requires:	git-core = %{epoch}:%{version}-%{release}
 
 %description -n git-core-oldies
 Git obsolete commands, bound to extinction
@@ -141,7 +141,7 @@ Git obsolete commands, bound to extinction
 %package -n gitweb
 Summary:	cgi-bin script for browse a git repository with web browser
 Group:		System/Servers
-Requires:	git-core = %{version}-%{release}
+Requires:	git-core = %{epoch}:%{version}-%{release}
 
 %description -n gitweb
 cgi-bin script for browse a git repository with web browser.
