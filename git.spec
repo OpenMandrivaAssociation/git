@@ -4,8 +4,8 @@
 Summary: Global Information Tracker
 Name: git
 Epoch: 1
-Version: 1.5.4.3
-Release: %mkrel 4
+Version: 1.5.6
+Release: %mkrel 1
 Source0: http://www.kernel.org/pub/software/scm/git/git-%{version}.tar.bz2
 Source1: http://www.kernel.org/pub/software/scm/git/git-%{version}.tar.bz2.sign
 Source2: gitweb.conf
@@ -49,7 +49,6 @@ Requires: diffutils
 Requires: rsync
 Requires: less
 Requires: openssh-clients
-Requires: curl
 Conflicts: git < 4.3.20-15
 
 %description -n git-core
@@ -248,8 +247,14 @@ rm -rf $RPM_BUILD_ROOT
 %{_mandir}/*/gitignore*
 %{_mandir}/*/gitmodules*
 %{_mandir}/*/gitcli*
+%{_mandir}/*/githooks*
+%{_mandir}/*/gitrepository*
+%{_mandir}/*/*tutorial*
+%{_mandir}/*/*glossary*
+%{_mandir}/*/gitdiffcore*
 %exclude %{_mandir}/man1/*svn*.1*
 %exclude %{_mandir}/man1/*cvs*.1*
+%exclude %{_mandir}/man7/*cvs*.7*
 %exclude %{_mandir}/man1/*email*.1*
 %exclude %{_mandir}/man1/git-archimport.1*
 %doc README Documentation/*.html Documentation/howto Documentation/technical contrib/vim/README.vim
@@ -282,6 +287,7 @@ rm -rf $RPM_BUILD_ROOT
 %defattr(-,root,root)
 %{_bindir}/*cvs*
 %{_mandir}/man1/*cvs*.1*
+%{_mandir}/man7/*cvs*.7*
 # %doc Documentation/*git-cvs*.txt
 # %doc Documentation/*git-cvs*.html
 
