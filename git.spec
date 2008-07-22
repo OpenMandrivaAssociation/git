@@ -4,7 +4,7 @@
 Summary: Global Information Tracker
 Name: git
 Epoch: 1
-Version: 1.5.6
+Version: 1.5.6.4
 Release: %mkrel 1
 Source0: http://www.kernel.org/pub/software/scm/git/git-%{version}.tar.bz2
 Source1: http://www.kernel.org/pub/software/scm/git/git-%{version}.tar.bz2.sign
@@ -50,6 +50,8 @@ Requires: rsync
 Requires: less
 Requires: openssh-clients
 Conflicts: git < 4.3.20-15
+Obsoletes: gitcompletion
+Provides: gitcompletion
 
 %description -n git-core
 This is a stupid (but extremely fast) directory content manager.  It
