@@ -4,8 +4,8 @@
 Summary: Global Information Tracker
 Name: git
 Epoch: 1
-Version: 1.5.6.5
-Release: %mkrel 2
+Version: 1.6.0
+Release: %mkrel 1
 Source0: http://www.kernel.org/pub/software/scm/git/git-%{version}.tar.bz2
 Source1: http://www.kernel.org/pub/software/scm/git/git-%{version}.tar.bz2.sign
 Source2: gitweb.conf
@@ -155,7 +155,7 @@ rm -f Documentation/.gitignore
 perl -pi -e 's!^(GITWEB_CSS|GITWEB_LOGO|GITWEB_FAVICON) = !$1 = /gitweb/!' Makefile
 
 %build
-%make prefix=%{_prefix} CFLAGS="$RPM_OPT_FLAGS" GITWEB_CONFIG=%{_sysconfdir}/gitweb.conf all doc gitweb/gitweb.cgi
+%make prefix=%{_prefix} gitexecdir=%{_libdir}/git-core CFLAGS="$RPM_OPT_FLAGS" GITWEB_CONFIG=%{_sysconfdir}/gitweb.conf all doc gitweb/gitweb.cgi
 
 # convert end of line to make rpmlint happy
 dos2unix Documentation/*.html
@@ -163,8 +163,8 @@ dos2unix Documentation/*.html
 %install
 rm -rf $RPM_BUILD_ROOT
 mkdir -p $RPM_BUILD_ROOT%{_bindir}
-%makeinstall_std prefix=%{_prefix} CFLAGS="$RPM_OPT_FLAGS"
-make install-doc prefix=%{_prefix} DESTDIR=$RPM_BUILD_ROOT
+%makeinstall_std prefix=%{_prefix} gitexecdir=%{_libdir}/git-core  CFLAGS="$RPM_OPT_FLAGS"
+make install-doc prefix=%{_prefix} gitexecdir=%{_libdir}/git-core   DESTDIR=$RPM_BUILD_ROOT
 install -m 755 contrib/gitview/gitview %buildroot%{_bindir}
 
 mkdir -p %{buildroot}%{_includedir}/git
@@ -235,10 +235,11 @@ rm -rf $RPM_BUILD_ROOT
 %_datadir/vim/syntax/*
 %{_bindir}/git
 %{_bindir}/git-*
-%exclude %{_bindir}/*svn*
-%exclude %{_bindir}/*cvs*
-%exclude %{_bindir}/git-archimport
-%exclude %{_bindir}/*email*
+%{_libdir}/git-core
+%exclude %{_libdir}/git-core/*svn*
+%exclude %{_libdir}/git-core/*cvs*
+%exclude %{_libdir}/git-core/git-archimport
+%exclude %{_libdir}/git-core/*email*
 # %exclude %{_bindir}/git-merge-recursive-old
 %{_datadir}/git-core
 %{_datadir}/git-gui
@@ -280,14 +281,14 @@ rm -rf $RPM_BUILD_ROOT
 
 %files -n git-svn
 %defattr(-,root,root)
-%{_bindir}/*svn*
+%{_libdir}/git-core/*svn*
 %{_mandir}/man1/*svn*.1*
 # %doc Documentation/*svn*.txt
 # %doc Documentation/*svn*.html
 
 %files -n git-cvs
 %defattr(-,root,root)
-%{_bindir}/*cvs*
+%{_libdir}/git-core/*cvs*
 %{_mandir}/man1/*cvs*.1*
 %{_mandir}/man7/*cvs*.7*
 # %doc Documentation/*git-cvs*.txt
@@ -295,14 +296,14 @@ rm -rf $RPM_BUILD_ROOT
 
 %files -n git-arch
 %defattr(-,root,root)
-%{_bindir}/git-archimport
+%{_libdir}/git-core/git-archimport
 %{_mandir}/man1/git-archimport.1*
 # %doc Documentation/git-archimport.txt
 # %doc Documentation/git-archimport.html
 
 %files -n git-email
 %defattr(-,root,root)
-%{_bindir}/*email*
+%{_libdir}/git-core/*email*
 %{_mandir}/man1/*email*.1*
 # %doc Documentation/*email*.txt
 # %doc Documentation/*email*.html
