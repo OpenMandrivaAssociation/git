@@ -5,7 +5,7 @@ Summary: Global Information Tracker
 Name: git
 Epoch: 1
 Version: 1.6.0.1
-Release: %mkrel 1
+Release: %mkrel 2
 Source0: http://www.kernel.org/pub/software/scm/git/git-%{version}.tar.bz2
 Source1: http://www.kernel.org/pub/software/scm/git/git-%{version}.tar.bz2.sign
 Source2: gitweb.conf
@@ -207,11 +207,6 @@ EOF
 mkdir -p  %{buildroot}%_sysconfdir/bash_completion.d
 install -m644 contrib/completion/git-completion.bash %{buildroot}%_sysconfdir/bash_completion.d/
 
-# install VIM syntax file
-mkdir -p %{buildroot}%_datadir/vim/syntax
-install -m644 contrib/vim/syntax/gitcommit.vim %{buildroot}%_datadir/vim/syntax
-cp contrib/vim/README contrib/vim/README.vim
-
 %check
 LC_ALL=C make test prefix=%{_prefix} CFLAGS="$RPM_OPT_FLAGS"
 
@@ -232,7 +227,6 @@ rm -rf $RPM_BUILD_ROOT
 /etc/emacs/site-start.d/*
 /etc/bash_completion.d/*
 %_datadir/emacs/site-lisp/*
-%_datadir/vim/syntax/*
 %{_bindir}/git
 %{_bindir}/git-*
 %{_libdir}/git-core
@@ -260,7 +254,7 @@ rm -rf $RPM_BUILD_ROOT
 %exclude %{_mandir}/man7/*cvs*.7*
 %exclude %{_mandir}/man1/*email*.1*
 %exclude %{_mandir}/man1/git-archimport.1*
-%doc README Documentation/*.html Documentation/howto Documentation/technical contrib/vim/README.vim
+%doc README Documentation/*.html Documentation/howto Documentation/technical 
 
 %files -n gitk
 %defattr(-,root,root,0755)
