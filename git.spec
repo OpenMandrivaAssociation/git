@@ -251,6 +251,7 @@ rm -rf $RPM_BUILD_ROOT
 %{_mandir}/*/*tutorial*
 %{_mandir}/*/*glossary*
 %{_mandir}/*/gitdiffcore*
+%{_mandir}/*/gitworkflows*
 %exclude %{_mandir}/man1/*svn*.1*
 %exclude %{_mandir}/man1/*cvs*.1*
 %exclude %{_mandir}/man7/*cvs*.7*
