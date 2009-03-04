@@ -4,8 +4,8 @@
 Summary: Global Information Tracker
 Name: git
 Epoch: 1
-Version: 1.6.1.3
-Release: %mkrel 2
+Version: 1.6.2
+Release: %mkrel 1
 Source0: http://www.kernel.org/pub/software/scm/git/git-%{version}.tar.bz2
 Source1: http://www.kernel.org/pub/software/scm/git/git-%{version}.tar.bz2.sign
 Source2: gitweb.conf
@@ -209,8 +209,7 @@ mkdir -p  %{buildroot}%_sysconfdir/bash_completion.d
 install -m644 contrib/completion/git-completion.bash %{buildroot}%_sysconfdir/bash_completion.d/
 
 %check
-#disabled for now, git 1.6.1 + svn 1.5.5 fails test
-#LC_ALL=C make test prefix=%{_prefix} CFLAGS="$RPM_OPT_FLAGS"
+LC_ALL=C make test prefix=%{_prefix} CFLAGS="$RPM_OPT_FLAGS"
 
 %clean
 rm -rf $RPM_BUILD_ROOT
