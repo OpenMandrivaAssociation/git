@@ -4,7 +4,7 @@
 Summary: Global Information Tracker
 Name: git
 Epoch: 1
-Version: 1.6.2.1
+Version: 1.6.2.2
 Release: %mkrel 1
 Source0: http://www.kernel.org/pub/software/scm/git/git-%{version}.tar.bz2
 Source1: http://www.kernel.org/pub/software/scm/git/git-%{version}.tar.bz2.sign
@@ -156,7 +156,9 @@ rm -f Documentation/.gitignore
 perl -pi -e 's!^(GITWEB_CSS|GITWEB_LOGO|GITWEB_FAVICON) = !$1 = /gitweb/!' Makefile
 
 %build
-%make prefix=%{_prefix} gitexecdir=%{_libdir}/git-core CFLAGS="$RPM_OPT_FLAGS" GITWEB_CONFIG=%{_sysconfdir}/gitweb.conf DOCBOOK_XSL_172=1 MANPAGE_XSL=callouts.xsl all doc gitweb/gitweb.cgi
+# same flags and prefix must be passed for make test too
+%define git_make_params prefix=%{_prefix} gitexecdir=%{_libdir}/git-core CFLAGS="$RPM_OPT_FLAGS" GITWEB_CONFIG=%{_sysconfdir}/gitweb.conf DOCBOOK_XSL_172=1 MANPAGE_XSL=callouts.xsl
+%make %git_make_params all doc gitweb/gitweb.cgi
 
 # convert end of line to make rpmlint happy
 dos2unix Documentation/*.html
@@ -209,7 +211,7 @@ mkdir -p  %{buildroot}%_sysconfdir/bash_completion.d
 install -m644 contrib/completion/git-completion.bash %{buildroot}%_sysconfdir/bash_completion.d/
 
 %check
-LC_ALL=C make test prefix=%{_prefix} CFLAGS="$RPM_OPT_FLAGS"
+LC_ALL=C %make %git_make_params test
 
 %clean
 rm -rf $RPM_BUILD_ROOT
