@@ -5,7 +5,7 @@ Summary: Global Information Tracker
 Name: git
 Epoch: 1
 Version: 1.6.2.4
-Release: %mkrel 1
+Release: %mkrel 2
 Source0: http://www.kernel.org/pub/software/scm/git/git-%{version}.tar.bz2
 Source1: http://www.kernel.org/pub/software/scm/git/git-%{version}.tar.bz2.sign
 Source2: gitweb.conf
@@ -163,6 +163,15 @@ perl -pi -e 's!^(GITWEB_CSS|GITWEB_LOGO|GITWEB_FAVICON) = !$1 = /gitweb/!' Makef
 # convert end of line to make rpmlint happy
 dos2unix Documentation/*.html
 
+# Produce RelNotes.txt.gz
+# protect from it ever coming into existence from upstream (should be preferred)
+cd Documentation
+find . -name RelNotes.\* | grep -q RelNotes\\. 2>/dev/null && exit 1
+# sed trick changes "-x.y.z.txt" to "-x.y.z.0.txt" for ordering, then undoes it
+relnotesls="`find . -name 'RelNotes-*' | sed 's/\(-[0-9]\.[0-9]\.[0-9]\)\.txt/\1.0.txt/' | sort -nr | sed 's/\(-[0-9]\.[0-9]\.[0-9]\)\.0\.txt/\1.txt/'`"
+# use awk to print a newline before each RelNotes header
+awk 'FNR == 1 { print "" } { print }' $relnotesls | gzip -9c >RelNotes.txt.gz
+
 %install
 rm -rf $RPM_BUILD_ROOT
 mkdir -p $RPM_BUILD_ROOT%{_bindir}
@@ -258,7 +267,7 @@ rm -rf $RPM_BUILD_ROOT
 %exclude %{_mandir}/man7/*cvs*.7*
 %exclude %{_mandir}/man1/*email*.1*
 %exclude %{_mandir}/man1/git-archimport.1*
-%doc README Documentation/*.html Documentation/howto Documentation/technical 
+%doc README Documentation/*.html Documentation/howto Documentation/technical Documentation/RelNotes.txt.gz
 
 %files -n gitk
 %defattr(-,root,root,0755)
