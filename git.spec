@@ -5,7 +5,7 @@ Summary: Global Information Tracker
 Name: git
 Epoch: 1
 Version: 1.6.2.4
-Release: %mkrel 2
+Release: %mkrel 3
 Source0: http://www.kernel.org/pub/software/scm/git/git-%{version}.tar.bz2
 Source1: http://www.kernel.org/pub/software/scm/git/git-%{version}.tar.bz2.sign
 Source2: gitweb.conf
@@ -24,10 +24,10 @@ BuildRequires: perl-CGI
 Requires: git-core = %{epoch}:%{version}
 Requires: gitk = %{epoch}:%{version}
 Requires: git-svn = %{epoch}:%{version}
-Requires: git-cvs = %{epoch}:%{version}
+Suggests: git-cvs = %{epoch}:%{version}
 Requires: git-email = %{epoch}:%{version}
-Requires: git-arch = %{epoch}:%{version}
-Requires: git-core-oldies = %{epoch}:%{version}
+Suggests: git-arch = %{epoch}:%{version}
+Suggests: git-core-oldies = %{epoch}:%{version}
 Obsoletes: linus-git < 1.5.4.3-2
 Provides: linus-git
 
@@ -106,14 +106,16 @@ Git tools for importing Subversion repositories.
 %package -n git-cvs
 Summary:        Git tools for importing CVS repositories
 Group:          Development/Other
-Requires:       git-core = %{epoch}:%{version}-%{release}, cvs, cvsps
+Requires:       git-core = %{epoch}:%{version}-%{release}
+Suggests: 	cvs, cvsps
 %description -n git-cvs
 Git tools for importing CVS repositories.
 
 %package -n git-arch
 Summary:        Git tools for importing Arch repositories
 Group:          Development/Other
-Requires:       git-core = %{epoch}:%{version}-%{release}, tla
+Requires:       git-core = %{epoch}:%{version}-%{release}
+Suggests:	tla
 %description -n git-arch
 Git tools for importing Arch repositories.
 
