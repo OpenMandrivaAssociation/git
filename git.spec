@@ -1,5 +1,6 @@
 
 %define libname %mklibname git
+%define profilefile 93git-branch.sh
 
 Summary: Global Information Tracker
 Name: git
@@ -9,6 +10,7 @@ Release: %mkrel 0
 Source0: http://www.kernel.org/pub/software/scm/git/git-%{version}.tar.bz2
 Source1: http://www.kernel.org/pub/software/scm/git/git-%{version}.tar.bz2.sign
 Source2: gitweb.conf
+Source3: %{profilefile}
 License: GPLv2
 Group: Development/Other
 Url: http://git-scm.com/
@@ -49,6 +51,7 @@ Requires: diffutils
 Requires: rsync
 Requires: less
 Requires: openssh-clients
+Suggests: git-prompt
 Conflicts: git < 4.3.20-15
 Obsoletes: gitcompletion
 Provides: gitcompletion
@@ -150,6 +153,13 @@ Requires:	git-core = %{epoch}:%{version}-%{release}
 %description -n gitweb
 cgi-bin script for browse a git repository with web browser.
 
+%package -n git-prompt
+Summary:        Shows the current git branch in your bash prompt
+Group:          Shells
+Requires:       git-core = %{epoch}:%{version}-%{release}
+%description -n git-prompt
+Shows the current git branch in your bash prompt.
+
 %prep
 %setup -q -n git-%{version}
 # remove borring file
@@ -220,6 +230,9 @@ EOF
 # install bash-completion file
 mkdir -p  %{buildroot}%_sysconfdir/bash_completion.d
 install -m644 contrib/completion/git-completion.bash %{buildroot}%_sysconfdir/bash_completion.d/
+
+# And the prompt manipulation file
+install -D -m 0644 %SOURCE3 %{buildroot}%{_sysconfdir}/profile.d/%{profilefile}
 
 %check
 LC_ALL=C %make %git_make_params test
@@ -336,3 +349,7 @@ rm -rf $RPM_BUILD_ROOT
 %config(noreplace) %{_webappconfdir}/gitweb.conf
 %{_var}/www/cgi-bin/gitweb.cgi
 %{_var}/www/gitweb
+
+%files -n git-prompt
+%defattr(-,root,root,0755)
+%{_sysconfdir}/profile.d/%{profilefile}
