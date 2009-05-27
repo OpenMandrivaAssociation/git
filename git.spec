@@ -6,7 +6,7 @@ Summary: Global Information Tracker
 Name: git
 Epoch: 1
 Version: 1.6.3
-Release: %mkrel 0
+Release: %mkrel 1
 Source0: http://www.kernel.org/pub/software/scm/git/git-%{version}.tar.bz2
 Source1: http://www.kernel.org/pub/software/scm/git/git-%{version}.tar.bz2.sign
 Source2: gitweb.conf
@@ -169,7 +169,7 @@ perl -pi -e 's!^(GITWEB_CSS|GITWEB_LOGO|GITWEB_FAVICON) = !$1 = /gitweb/!' Makef
 
 %build
 # same flags and prefix must be passed for make test too
-%define git_make_params prefix=%{_prefix} gitexecdir=%{_libdir}/git-core CFLAGS="$RPM_OPT_FLAGS" GITWEB_CONFIG=%{_sysconfdir}/gitweb.conf DOCBOOK_XSL_172=1 MANPAGE_XSL=callouts.xsl
+%define git_make_params prefix=%{_prefix} gitexecdir=%{_libdir}/git-core CFLAGS="$RPM_OPT_FLAGS" GITWEB_CONFIG=%{_sysconfdir}/gitweb.conf DOCBOOK_XSL_172=1
 %make %git_make_params all doc gitweb/gitweb.cgi
 
 # convert end of line to make rpmlint happy
