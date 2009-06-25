@@ -6,7 +6,7 @@ Summary: Global Information Tracker
 Name: git
 Epoch: 1
 Version: 1.6.3.3
-Release: %mkrel 1
+Release: %mkrel 2
 Source0: http://www.kernel.org/pub/software/scm/git/git-%{version}.tar.bz2
 Source1: http://www.kernel.org/pub/software/scm/git/git-%{version}.tar.bz2.sign
 Source2: gitweb.conf
@@ -189,7 +189,11 @@ rm -rf $RPM_BUILD_ROOT
 mkdir -p $RPM_BUILD_ROOT%{_bindir}
 %makeinstall_std prefix=%{_prefix} gitexecdir=%{_libdir}/git-core  CFLAGS="$RPM_OPT_FLAGS"
 make install-doc prefix=%{_prefix} gitexecdir=%{_libdir}/git-core   DESTDIR=$RPM_BUILD_ROOT
-install -m 755 contrib/gitview/gitview %buildroot%{_bindir}
+# (cg) Copy the whole contrib dir as docs. It contains useful scripts.
+mkdir -p %{buildroot}%{_datadir}/doc/git-core
+cp -ar contrib %{buildroot}%{_datadir}/doc/git-core
+# (cg) Even tho' we copy the whole contrib dir, copy this rather than symlink incase the user is excluding docs
+install -m 755 contrib/gitview/gitview %{buildroot}%{_bindir}
 
 mkdir -p %{buildroot}%{_includedir}/git
 cp *.h %{buildroot}%{_includedir}/git
@@ -222,14 +226,14 @@ find %{buildroot}/%{_mandir} -type f | xargs perl -e 's/\.sp$/\n\.sp/g' -pi
 
 # emacs VC backend:
 mkdir -p %{buildroot}{%_datadir/emacs/site-lisp,/etc/emacs/site-start.d}
-install -m 644 contrib/emacs/*.el %{buildroot}%_datadir/emacs/site-lisp
+install -m 644 contrib/emacs/*.el %{buildroot}%{_datadir}/emacs/site-lisp
 cat >%{buildroot}/etc/emacs/site-start.d/vc_git.el <<EOF
 (add-to-list 'vc-handled-backends 'GIT)
 EOF
 
 # install bash-completion file
-mkdir -p  %{buildroot}%_sysconfdir/bash_completion.d
-install -m644 contrib/completion/git-completion.bash %{buildroot}%_sysconfdir/bash_completion.d/
+mkdir -p  %{buildroot}%{_sysconfdir}/bash_completion.d
+install -m644 contrib/completion/git-completion.bash %{buildroot}%{_sysconfdir}/bash_completion.d/
 
 # And the prompt manipulation file
 install -D -m 0644 %SOURCE3 %{buildroot}%{_sysconfdir}/profile.d/%{profilefile}
@@ -253,7 +257,7 @@ rm -rf $RPM_BUILD_ROOT
 %defattr(-,root,root,0755)
 /etc/emacs/site-start.d/*
 /etc/bash_completion.d/*
-%_datadir/emacs/site-lisp/*
+%{_datadir}/emacs/site-lisp/*
 %{_bindir}/git
 %{_bindir}/git-*
 %{_libdir}/git-core
