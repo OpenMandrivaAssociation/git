@@ -6,7 +6,7 @@ Summary: Global Information Tracker
 Name: git
 Epoch: 1
 Version: 1.6.3.3
-Release: %mkrel 2
+Release: %mkrel 3
 Source0: http://www.kernel.org/pub/software/scm/git/git-%{version}.tar.bz2
 Source1: http://www.kernel.org/pub/software/scm/git/git-%{version}.tar.bz2.sign
 Source2: gitweb.conf
@@ -21,7 +21,6 @@ BuildRequires: curl-devel
 BuildRequires: expat-devel
 BuildRequires: asciidoc
 BuildRequires: xmlto
-BuildRequires: dos2unix
 BuildRequires: perl-CGI
 Requires: git-core = %{epoch}:%{version}
 Requires: gitk = %{epoch}:%{version}
@@ -172,9 +171,6 @@ perl -pi -e 's!^(GITWEB_CSS|GITWEB_LOGO|GITWEB_FAVICON) = !$1 = /gitweb/!' Makef
 %define git_make_params prefix=%{_prefix} gitexecdir=%{_libdir}/git-core CFLAGS="$RPM_OPT_FLAGS" GITWEB_CONFIG=%{_sysconfdir}/gitweb.conf DOCBOOK_XSL_172=1
 %make %git_make_params all doc gitweb/gitweb.cgi
 
-# convert end of line to make rpmlint happy
-dos2unix Documentation/*.html
-
 # Produce RelNotes.txt.gz
 # protect from it ever coming into existence from upstream (should be preferred)
 cd Documentation
@@ -233,7 +229,8 @@ EOF
 
 # install bash-completion file
 mkdir -p  %{buildroot}%{_sysconfdir}/bash_completion.d
-install -m644 contrib/completion/git-completion.bash %{buildroot}%{_sysconfdir}/bash_completion.d/
+install -m644 contrib/completion/git-completion.bash \
+    %{buildroot}%{_sysconfdir}/bash_completion.d/git
 
 # And the prompt manipulation file
 install -D -m 0644 %SOURCE3 %{buildroot}%{_sysconfdir}/profile.d/%{profilefile}
