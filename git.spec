@@ -6,11 +6,12 @@ Summary: Global Information Tracker
 Name: git
 Epoch: 1
 Version: 1.6.4.3
-Release: %mkrel 1
+Release: %mkrel 2
 Source0: http://www.kernel.org/pub/software/scm/git/git-%{version}.tar.bz2
 Source1: http://www.kernel.org/pub/software/scm/git/git-%{version}.tar.bz2.sign
 Source2: gitweb.conf
 Source3: %{profilefile}
+Patch0:  git-1.6.4.3-silent-bash-completion-errors.patch
 License: GPLv2
 Group: Development/Other
 Url: http://git-scm.com/
@@ -161,6 +162,7 @@ Shows the current git branch in your bash prompt.
 
 %prep
 %setup -q -n git-%{version}
+%patch0 -p 1
 # remove borring file
 rm -f Documentation/.gitignore
 # prefix gitweb css/png files with /gitweb
