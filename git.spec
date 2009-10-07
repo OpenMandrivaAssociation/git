@@ -6,7 +6,7 @@ Summary: Global Information Tracker
 Name: git
 Epoch: 1
 Version: 1.6.4.4
-Release: %mkrel 1
+Release: %mkrel 2
 Source0: http://www.kernel.org/pub/software/scm/git/git-%{version}.tar.bz2
 Source1: http://www.kernel.org/pub/software/scm/git/git-%{version}.tar.bz2.sign
 Source2: gitweb.conf
