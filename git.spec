@@ -1,18 +1,18 @@
 
 %define libname %mklibname git
-%define profilefile1 93git-branch.sh
-%define profilefile2 93git-env.sh
+%define profile_branch 93git-branch.sh
+%define profile_env    93git-env.sh
 
 Summary: Global Information Tracker
 Name: git
 Epoch: 1
 Version: 1.6.4.4
-Release: %mkrel 3
+Release: %mkrel 4
 Source0: http://www.kernel.org/pub/software/scm/git/git-%{version}.tar.bz2
 Source1: http://www.kernel.org/pub/software/scm/git/git-%{version}.tar.bz2.sign
 Source2: gitweb.conf
-Source3: %{profilefile1}
-Source4: %{profilefile2}
+Source3: %{profile_branch}
+Source4: %{profile_env}
 Patch0:  git-1.6.4.3-silent-bash-completion-errors.patch
 License: GPLv2
 Group: Development/Other
@@ -237,8 +237,8 @@ install -m644 contrib/completion/git-completion.bash \
     %{buildroot}%{_sysconfdir}/bash_completion.d/git
 
 # And the prompt manipulation file
-install -D -m 0644 %SOURCE3 %{buildroot}%{_sysconfdir}/profile.d/%{profilefile1}
-install -D -m 0644 %SOURCE3 %{buildroot}%{_sysconfdir}/profile.d/%{profilefile2}
+install -D -m 0644 %SOURCE3 %{buildroot}%{_sysconfdir}/profile.d/%{profile_branch}
+install -D -m 0644 %SOURCE4 %{buildroot}%{_sysconfdir}/profile.d/%{profile_env}
 
 %check
 LC_ALL=C %make %git_make_params test
@@ -257,7 +257,7 @@ rm -rf $RPM_BUILD_ROOT
 
 %files -n git-core
 %defattr(-,root,root,0755)
-%{_sysconfdir}/profile.d/%{profilefile2}
+%{_sysconfdir}/profile.d/%{profile_env}
 /etc/emacs/site-start.d/*
 /etc/bash_completion.d/*
 %{_datadir}/emacs/site-lisp/*
@@ -359,4 +359,4 @@ rm -rf $RPM_BUILD_ROOT
 
 %files -n git-prompt
 %defattr(-,root,root,0755)
-%{_sysconfdir}/profile.d/%{profilefile1}
+%{_sysconfdir}/profile.d/%{profile_branch}
