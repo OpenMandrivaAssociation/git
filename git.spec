@@ -238,7 +238,8 @@ install -m644 contrib/completion/git-completion.bash \
 
 # And the prompt manipulation file
 install -D -m 0644 %SOURCE3 %{buildroot}%{_sysconfdir}/profile.d/%{profile_branch}
-install -D -m 0644 %SOURCE4 %{buildroot}%{_sysconfdir}/profile.d/%{profile_env}
+# exposes a bug in less, as reported by coling
+#install -D -m 0644 %SOURCE4 %{buildroot}%{_sysconfdir}/profile.d/%{profile_env}
 
 %check
 LC_ALL=C %make %git_make_params test
@@ -257,7 +258,6 @@ rm -rf $RPM_BUILD_ROOT
 
 %files -n git-core
 %defattr(-,root,root,0755)
-%{_sysconfdir}/profile.d/%{profile_env}
 /etc/emacs/site-start.d/*
 /etc/bash_completion.d/*
 %{_datadir}/emacs/site-lisp/*
