@@ -3,37 +3,41 @@
 %define profile_branch 93git-branch.sh
 %define profile_env    93git-env.sh
 
+Name:    git
+Version: 1.6.5.2
+Release: %mkrel 1
+Epoch:   1
+
 Summary: Global Information Tracker
-Name: git
-Epoch: 1
-Version: 1.6.4.4
-Release: %mkrel 6
+License: GPLv2
+Group:   Development/Other
+Url:     http://git-scm.com/
 Source0: http://www.kernel.org/pub/software/scm/git/git-%{version}.tar.bz2
 Source1: http://www.kernel.org/pub/software/scm/git/git-%{version}.tar.bz2.sign
 Source2: gitweb.conf
 Source3: %{profile_branch}
 Source4: %{profile_env}
-Patch0:  git-1.6.4.3-silent-bash-completion-errors.patch
-License: GPLv2
-Group: Development/Other
-Url: http://git-scm.com/
-BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-buildroot
-BuildRequires: openssl-devel
-BuildRequires: zlib-devel
+
+BuildRequires: asciidoc
 BuildRequires: curl-devel
 BuildRequires: expat-devel
-BuildRequires: asciidoc
-BuildRequires: xmlto
+BuildRequires: openssl-devel
 BuildRequires: perl-CGI
+BuildRequires: xmlto
+BuildRequires: zlib-devel
+
+BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}
+
+Obsoletes: linus-git < 1.5.4.3-2
+Provides:  linus-git
+
 Requires: git-core = %{epoch}:%{version}
 Requires: gitk = %{epoch}:%{version}
 Requires: git-svn = %{epoch}:%{version}
-Suggests: git-cvs = %{epoch}:%{version}
 Requires: git-email = %{epoch}:%{version}
 Suggests: git-arch = %{epoch}:%{version}
 Suggests: git-core-oldies = %{epoch}:%{version}
-Obsoletes: linus-git < 1.5.4.3-2
-Provides: linus-git
+Suggests: git-cvs = %{epoch}:%{version}
 
 %description
 This is a stupid (but extremely fast) directory content manager.  It
@@ -164,7 +168,6 @@ Shows the current git branch in your bash prompt.
 
 %prep
 %setup -q -n git-%{version}
-%patch0 -p 1
 # remove borring file
 rm -f Documentation/.gitignore
 # prefix gitweb css/png files with /gitweb
