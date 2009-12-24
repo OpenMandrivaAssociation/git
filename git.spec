@@ -4,7 +4,7 @@
 %define profile_env    93git-env.sh
 
 Name:    git
-Version: 1.6.5.7
+Version: 1.6.6
 Release: %mkrel 1
 Epoch:   1
 
