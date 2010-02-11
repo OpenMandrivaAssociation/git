@@ -25,6 +25,7 @@ BuildRequires: openssl-devel
 BuildRequires: perl-CGI
 BuildRequires: xmlto
 BuildRequires: zlib-devel
+BuildRequires: docbook-dtd45-xml
 
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}
 
