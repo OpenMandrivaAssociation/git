@@ -4,7 +4,7 @@
 %define profile_env    93git-env.sh
 
 Name:    git
-Version: 1.6.6.2
+Version: 1.7.0
 Release: %mkrel 1
 Epoch:   1
 
@@ -143,6 +143,14 @@ Requires:       git-core = %{epoch}:%{version}-%{release}
 
 %description -n perl-Git
 Perl interface to Git
+
+%package -n python-git
+Summary:        Python interface to Git
+Group:          Development/Python
+Requires:       git-core = %{epoch}:%{version}-%{release}
+
+%description -n python-git
+Python interface to Git
 
 %package -n git-core-oldies
 Summary:	Git obsolete commands, bound to extinction
@@ -347,6 +355,10 @@ rm -rf $RPM_BUILD_ROOT
 %{_mandir}/man3/*
 # /usr/lib/perl5/site_perl/5.8.8/Git.pm
 # /usr/local/share/man/man3/Git.3pm
+
+%files -n python-git
+%defattr(-,root,root)
+%py_puresitedir/*
 
 %files -n git-core-oldies
 %defattr(-,root,root,0755)
