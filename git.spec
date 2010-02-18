@@ -23,6 +23,7 @@ BuildRequires: curl-devel
 BuildRequires: expat-devel
 BuildRequires: openssl-devel
 BuildRequires: perl-CGI
+BuildRequires: python-devel
 BuildRequires: xmlto
 BuildRequires: zlib-devel
 BuildRequires: docbook-dtd45-xml
