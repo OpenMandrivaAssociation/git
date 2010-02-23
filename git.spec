@@ -5,7 +5,7 @@
 
 Name:    git
 Version: 1.7.0
-Release: %mkrel 1
+Release: %mkrel 2
 Epoch:   1
 
 Summary: Global Information Tracker
@@ -217,20 +217,23 @@ install -m 644 libgit.a %buildroot%{_libdir}/libgit.a
 mv %{buildroot}/%{_prefix}/lib/perl5/site_perl %{buildroot}/%{_prefix}/lib/perl5/vendor_perl
 rm -f %{buildroot}/%{perl_vendorlib}/Error.pm
 
-mkdir -p %{buildroot}%{_var}/www/cgi-bin/gitweb/
-cp gitweb/gitweb.cgi %{buildroot}%{_var}/www/cgi-bin/
-mkdir -p %{buildroot}%{_var}/www/gitweb/
-cp gitweb/*.css gitweb/*.png %{buildroot}%{_var}/www/gitweb
+mkdir -p %{buildroot}%{_datadir}/gitweb
+install -m 755 gitweb/gitweb.cgi %{buildroot}%{_datadir}/gitweb
+install -m 644 gitweb/*.css gitweb/*.png %{buildroot}%{_datadir}/gitweb
+
 mkdir -p %{buildroot}%{_sysconfdir}
 install -m644 %{SOURCE2} %{buildroot}%{_sysconfdir}/gitweb.conf
 # apache configuration
 mkdir -p %{buildroot}%{_webappconfdir}
 cat > %{buildroot}%{_webappconfdir}/gitweb.conf <<EOF
 # gitweb configuration
-Alias /gitweb %{_var}/www/gitweb
+Alias /gitweb %{_datadir}/gitweb
 
-<Directory %{_var}/www/gitweb>
+<Directory %{_datadir}/gitweb>
+    Order allow,deny
     Allow from all
+    Options ExecCgi
+    DirectoryIndex gitweb.cgi
 </Directory>
 EOF
 
@@ -261,10 +264,14 @@ LC_ALL=C %make %git_make_params test
 rm -rf $RPM_BUILD_ROOT
 
 %post -n gitweb
-%{_post_webapp}
+%if %mdkversion < 201010
+%_post_webapp
+%endif
 
 %postun -n gitweb
-%{_postun_webapp}
+%if %mdkversion < 201010
+%_postun_webapp
+%endif
 
 %files
 # no file in the main package
@@ -371,8 +378,7 @@ rm -rf $RPM_BUILD_ROOT
 %doc gitweb/INSTALL gitweb/README
 %config(noreplace) %{_sysconfdir}/gitweb.conf
 %config(noreplace) %{_webappconfdir}/gitweb.conf
-%{_var}/www/cgi-bin/gitweb.cgi
-%{_var}/www/gitweb
+%{_datadir}/gitweb
 
 %files -n git-prompt
 %defattr(-,root,root,0755)
