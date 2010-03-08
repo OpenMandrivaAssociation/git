@@ -4,8 +4,8 @@
 %define profile_env    93git-env.sh
 
 Name:    git
-Version: 1.7.0.1
-Release: %mkrel 2
+Version: 1.7.0.2
+Release: %mkrel 1
 Epoch:   1
 
 Summary: Global Information Tracker
