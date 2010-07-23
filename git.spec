@@ -4,7 +4,7 @@
 %define profile_env    93git-env.sh
 
 Name:    git
-Version: 1.7.1.1
+Version: 1.7.2
 Release: %mkrel 1
 Epoch:   1
 
@@ -217,9 +217,9 @@ install -m 644 libgit.a %buildroot%{_libdir}/libgit.a
 mv %{buildroot}/%{_prefix}/lib/perl5/site_perl %{buildroot}/%{_prefix}/lib/perl5/vendor_perl
 rm -f %{buildroot}/%{perl_vendorlib}/Error.pm
 
-mkdir -p %{buildroot}%{_datadir}/gitweb
+mkdir -p %{buildroot}%{_datadir}/gitweb/static
 install -m 755 gitweb/gitweb.cgi %{buildroot}%{_datadir}/gitweb
-install -m 644 gitweb/*.css gitweb/*.png %{buildroot}%{_datadir}/gitweb
+install -m 644 gitweb/static/*.css gitweb/static/*.png %{buildroot}%{_datadir}/gitweb/static/
 
 mkdir -p %{buildroot}%{_sysconfdir}
 install -m644 %{SOURCE2} %{buildroot}%{_sysconfdir}/gitweb.conf
@@ -304,6 +304,7 @@ rm -rf $RPM_BUILD_ROOT
 %{_mandir}/*/*glossary*
 %{_mandir}/*/gitdiffcore*
 %{_mandir}/*/gitworkflows*
+%{_mandir}/*/gitrevisions*
 %exclude %{_mandir}/man1/*svn*.1*
 %exclude %{_mandir}/man1/*cvs*.1*
 %exclude %{_mandir}/man7/*cvs*.7*
