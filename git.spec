@@ -5,7 +5,7 @@
 
 Name:    git
 Version: 1.7.3
-Release: %mkrel 1
+Release: %mkrel 2
 Epoch:   1
 
 Summary: Global Information Tracker
@@ -189,13 +189,11 @@ perl -pi -e 's!^(GITWEB_CSS|GITWEB_LOGO|GITWEB_FAVICON) = !$1 = /gitweb/!' Makef
 %make %git_make_params all doc gitweb/gitweb.cgi
 
 # Produce RelNotes.txt.gz
-# protect from it ever coming into existence from upstream (should be preferred)
-cd Documentation
-find . -name RelNotes.\* | grep -q RelNotes\\. 2>/dev/null && exit 1
 # sed trick changes "-x.y.z.txt" to "-x.y.z.0.txt" for ordering, then undoes it
-relnotesls="`find . -name 'RelNotes-*' | sed 's/\(-[0-9]\.[0-9]\.[0-9]\)\.txt/\1.0.txt/' | sort -nr | sed 's/\(-[0-9]\.[0-9]\.[0-9]\)\.0\.txt/\1.txt/'`"
 # use awk to print a newline before each RelNotes header
-awk 'FNR == 1 { print "" } { print }' $relnotesls | gzip -9c >RelNotes.txt.gz
+cd Documentation/RelNotes \
+&& relnotesls="`find . -name '*.txt' | sed 's/\([0-9]\.[0-9]\.[0-9]\)\.txt/\1.0.txt/' | sort -nr | sed 's/\([0-9]\.[0-9]\.[0-9]\)\.0\.txt/\1.txt/'`" \
+&& awk 'FNR == 1 { print "" } { print }' $relnotesls | gzip -9c >../RelNotes.txt.gz
 
 %install
 rm -rf $RPM_BUILD_ROOT
