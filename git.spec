@@ -5,7 +5,7 @@
 
 Name:    git
 Version: 1.7.3.3
-Release: %mkrel 1
+Release: %mkrel 2
 Epoch:   1
 
 Summary: Global Information Tracker
@@ -173,6 +173,7 @@ cgi-bin script for browse a git repository with web browser.
 Summary:        Shows the current git branch in your bash prompt
 Group:          Shells
 Requires:       git-core = %{epoch}:%{version}-%{release}
+Requires:       bash-completion
 %description -n git-prompt
 Shows the current git branch in your bash prompt.
 
