@@ -5,7 +5,7 @@
 
 Name:    git
 Version: 1.7.4.1
-Release: %mkrel 1
+Release: %mkrel 2
 Epoch:   1
 
 Summary: Global Information Tracker
