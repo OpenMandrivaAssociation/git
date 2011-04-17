@@ -5,7 +5,7 @@
 
 Name:    git
 Version: 1.7.4.4
-Release: %mkrel 1
+Release: %mkrel 2
 Epoch:   1
 
 Summary: Global Information Tracker
@@ -134,6 +134,8 @@ Git tools for importing Arch repositories.
 Summary:        Git tools for sending email
 Group:          Development/Other
 Requires:       git-core = %{epoch}:%{version}-%{release}
+Suggests:	perl-Authen-SASL
+Suggests:	perl-MIME-Base64
 %description -n git-email
 Git tools for sending email.
 
