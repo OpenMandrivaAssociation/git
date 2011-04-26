@@ -111,6 +111,8 @@ Development files for git.
 Summary:        Git tools for importing Subversion repositories
 Group:          Development/Other
 Requires:       git-core = %{epoch}:%{version}-%{release}, subversion
+Requires:	perl-Git
+Requires:	perl-SVN
 %description -n git-svn
 Git tools for importing Subversion repositories.
 
