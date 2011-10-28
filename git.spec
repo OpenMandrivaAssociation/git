@@ -1,10 +1,9 @@
-
 %define libname %mklibname git
 %define profile_branch 93git-branch.sh
 %define profile_env    93git-env.sh
 
 Name:    git
-Version: 1.7.6
+Version: 1.7.7.1
 Release: %mkrel 1
 Epoch:   1
 
@@ -12,8 +11,8 @@ Summary: Global Information Tracker
 License: GPLv2
 Group:   Development/Other
 Url:     http://git-scm.com/
-Source0: http://www.kernel.org/pub/software/scm/git/git-%{version}.tar.bz2
-Source1: http://www.kernel.org/pub/software/scm/git/git-%{version}.tar.bz2.sign
+Source0: http://www.kernel.org/pub/software/scm/git/git-%{version}.tar.gz
+#Source1: http://www.kernel.org/pub/software/scm/git/git-%{version}.tar.bz2.sign
 Source2: gitweb.conf
 Source3: %{profile_branch}
 Source4: %{profile_env}
@@ -51,7 +50,6 @@ elsewhere for tools for ordinary humans layered on top of this.
 
 This is a dummy package which brings in all subpackages.
 
-
 %package -n git-core
 Summary: Global Information Tracker
 Group: Development/Other
@@ -77,7 +75,6 @@ This are the core tools with minimal dependencies.
 You may want to install subversion, cpsps and/or tla to import
 repositories from other VCS.
 
-
 %package -n gitk
 Summary: Git revision tree visualiser
 Group: Development/Other
@@ -99,12 +96,12 @@ Requires: python-gtksourceview
 %description -n gitview
 Git graphical revision tree visualiser.
 
-%package -n %libname-devel	
-Summary: Git development files	
-Group: Development/Other	
-Provides: git-devel = %version-%release	
- 	 	
-%description -n %libname-devel	
+%package -n %{libname}-devel
+Summary: Git development files
+Group: Development/Other
+Provides: git-devel = %{version}-%{release}
+
+%description -n %{libname}-devel
 Development files for git.
 
 %package -n git-svn
@@ -113,6 +110,7 @@ Group:          Development/Other
 Requires:       git-core = %{epoch}:%{version}-%{release}, subversion
 Requires:	perl-Git
 Requires:	perl-SVN
+
 %description -n git-svn
 Git tools for importing Subversion repositories.
 
@@ -121,6 +119,7 @@ Summary:        Git tools for importing CVS repositories
 Group:          Development/Other
 Requires:       git-core = %{epoch}:%{version}-%{release}
 Suggests: 	cvs, cvsps
+
 %description -n git-cvs
 Git tools for importing CVS repositories.
 
@@ -129,6 +128,7 @@ Summary:        Git tools for importing Arch repositories
 Group:          Development/Other
 Requires:       git-core = %{epoch}:%{version}-%{release}
 Suggests:	tla
+
 %description -n git-arch
 Git tools for importing Arch repositories.
 
@@ -138,6 +138,7 @@ Group:          Development/Other
 Requires:       git-core = %{epoch}:%{version}-%{release}
 Suggests:	perl-Authen-SASL
 Suggests:	perl-MIME-Base64
+
 %description -n git-email
 Git tools for sending email.
 
@@ -178,6 +179,7 @@ Summary:        Shows the current git branch in your bash prompt
 Group:          Shells
 Requires:       git-core = %{epoch}:%{version}-%{release}
 Requires:       bash-completion
+
 %description -n git-prompt
 Shows the current git branch in your bash prompt.
 
@@ -190,7 +192,7 @@ perl -pi -e 's!^(GITWEB_CSS|GITWEB_LOGO|GITWEB_FAVICON) = !$1 = /gitweb/!' Makef
 
 %build
 # same flags and prefix must be passed for make test too
-%define git_make_params prefix=%{_prefix} gitexecdir=%{_libdir}/git-core CFLAGS="$RPM_OPT_FLAGS" GITWEB_CONFIG=%{_sysconfdir}/gitweb.conf DOCBOOK_XSL_172=1
+%define git_make_params prefix=%{_prefix} gitexecdir=%{_libdir}/git-core CFLAGS="%{optflags}" GITWEB_CONFIG=%{_sysconfdir}/gitweb.conf DOCBOOK_XSL_172=1
 %make %git_make_params all doc gitweb/gitweb.cgi
 
 # Produce RelNotes.txt.gz
@@ -202,9 +204,9 @@ cd Documentation/RelNotes \
 
 %install
 rm -rf $RPM_BUILD_ROOT
-mkdir -p $RPM_BUILD_ROOT%{_bindir}
-%makeinstall_std prefix=%{_prefix} gitexecdir=%{_libdir}/git-core  CFLAGS="$RPM_OPT_FLAGS"
-make install-doc prefix=%{_prefix} gitexecdir=%{_libdir}/git-core   DESTDIR=$RPM_BUILD_ROOT
+mkdir -p %{buildroot}%{_bindir}
+%makeinstall_std prefix=%{_prefix} gitexecdir=%{_libdir}/git-core  CFLAGS="%{optflags}"
+make install-doc prefix=%{_prefix} gitexecdir=%{_libdir}/git-core   DESTDIR=%{buildroot}
 # (cg) Copy the whole contrib dir as docs. It contains useful scripts.
 mkdir -p %{buildroot}%{_datadir}/doc/git-core
 cp -ar contrib %{buildroot}%{_datadir}/doc/git-core
@@ -215,7 +217,7 @@ mkdir -p %{buildroot}%{_includedir}/git
 cp *.h %{buildroot}%{_includedir}/git
 
 mkdir -p %{buildroot}%{_libdir}
-install -m 644 libgit.a %buildroot%{_libdir}/libgit.a
+install -m 644 libgit.a %{buildroot}%{_libdir}/libgit.a
 
 mv %{buildroot}/%{_prefix}/lib/perl5/site_perl %{buildroot}/%{_prefix}/lib/perl5/vendor_perl
 rm -f %{buildroot}/%{perl_vendorlib}/Error.pm
@@ -244,7 +246,7 @@ EOF
 find %{buildroot}/%{_mandir} -type f | xargs perl -e 's/\.sp$/\n\.sp/g' -pi
 
 # emacs VC backend:
-mkdir -p %{buildroot}{%_datadir/emacs/site-lisp,/etc/emacs/site-start.d}
+mkdir -p %{buildroot}{%{_datadir}/emacs/site-lisp,/etc/emacs/site-start.d}
 install -m 644 contrib/emacs/*.el %{buildroot}%{_datadir}/emacs/site-lisp
 cat >%{buildroot}/etc/emacs/site-start.d/vc_git.el <<EOF
 (add-to-list 'vc-handled-backends 'GIT)
@@ -256,7 +258,7 @@ install -m644 contrib/completion/git-completion.bash \
     %{buildroot}%{_sysconfdir}/bash_completion.d/git
 
 # And the prompt manipulation file
-install -D -m 0644 %SOURCE3 %{buildroot}%{_sysconfdir}/profile.d/%{profile_branch}
+install -D -m 0644 %{SOURCE3} %{buildroot}%{_sysconfdir}/profile.d/%{profile_branch}
 # exposes a bug in less, as reported by coling
 #install -D -m 0644 %SOURCE4 %{buildroot}%{_sysconfdir}/profile.d/%{profile_env}
 
@@ -300,6 +302,7 @@ rm -rf $RPM_BUILD_ROOT
 %{_mandir}/*/gitattributes*
 %{_mandir}/*/gitignore*
 %{_mandir}/*/gitmodules*
+%{_mandir}/*/gitnamespaces*
 %{_mandir}/*/gitcli*
 %{_mandir}/*/githooks*
 %{_mandir}/*/gitrepository*
@@ -370,7 +373,7 @@ rm -rf $RPM_BUILD_ROOT
 
 %files -n python-git
 %defattr(-,root,root)
-%py_puresitedir/*
+%{py_puresitedir}/*
 
 %files -n git-core-oldies
 %defattr(-,root,root,0755)
