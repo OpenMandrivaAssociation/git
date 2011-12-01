@@ -203,7 +203,7 @@ cd Documentation/RelNotes \
 && awk 'FNR == 1 { print "" } { print }' $relnotesls | gzip -9c >../RelNotes.txt.gz
 
 %install
-rm -rf $RPM_BUILD_ROOT
+rm -rf %{buildroot}
 mkdir -p %{buildroot}%{_bindir}
 %makeinstall_std prefix=%{_prefix} gitexecdir=%{_libdir}/git-core  CFLAGS="%{optflags}"
 make install-doc prefix=%{_prefix} gitexecdir=%{_libdir}/git-core   DESTDIR=%{buildroot}
@@ -266,7 +266,7 @@ install -D -m 0644 %{SOURCE3} %{buildroot}%{_sysconfdir}/profile.d/%{profile_bra
 LC_ALL=C %make %git_make_params test
 
 %clean
-rm -rf $RPM_BUILD_ROOT
+rm -rf %{buildroot}
 
 %post -n gitweb
 %if %mdkversion < 201010
