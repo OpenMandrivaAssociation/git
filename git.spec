@@ -1,44 +1,38 @@
-%define libname %mklibname git
-%define profile_branch 93git-branch.sh
-%define profile_env    93git-env.sh
+%define libname		%mklibname git
+%define profile_branch	93git-branch.sh
+%define profile_env	93git-env.sh
 
-Name:    git
-Version: 1.7.7.1
-Release: %mkrel 1
-Epoch:   1
-
-Summary: Global Information Tracker
-License: GPLv2
-Group:   Development/Other
-Url:     http://git-scm.com/
-Source0: http://www.kernel.org/pub/software/scm/git/git-%{version}.tar.gz
-#Source1: http://www.kernel.org/pub/software/scm/git/git-%{version}.tar.bz2.sign
-Source2: gitweb.conf
-Source3: %{profile_branch}
-Source4: %{profile_env}
-
-BuildRequires: asciidoc
-BuildRequires: curl-devel
-BuildRequires: expat-devel
-BuildRequires: openssl-devel
-BuildRequires: perl-CGI
-BuildRequires: python-devel
-BuildRequires: xmlto
-BuildRequires: zlib-devel
-BuildRequires: docbook-dtd45-xml
-
-BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}
-
-Obsoletes: linus-git < 1.5.4.3-2
-Provides:  linus-git
-
-Requires: git-core = %{epoch}:%{version}
-Requires: gitk = %{epoch}:%{version}
-Requires: git-svn = %{epoch}:%{version}
-Requires: git-email = %{epoch}:%{version}
-Suggests: git-arch = %{epoch}:%{version}
-Suggests: git-core-oldies = %{epoch}:%{version}
-Suggests: git-cvs = %{epoch}:%{version}
+Name:		git
+Version:	1.7.8
+# 1.7.8 still builds fine in 2010.2 so keep mkrel for backports sake
+Release:	%mkrel 1
+Epoch:		1
+Summary:	Global Information Tracker
+License:	GPLv2
+Group:		Development/Other
+Url:		http://git-scm.com/
+Source0:	http://www.kernel.org/pub/software/scm/git/git-%{version}.tar.gz
+Source2:	gitweb.conf
+Source3:	%{profile_branch}
+# Do we really need it? It's not used anyway
+Source4:	%{profile_env}
+BuildRequires:	asciidoc
+BuildRequires:	curl-devel
+BuildRequires:	expat-devel
+BuildRequires:	openssl-devel
+BuildRequires:	perl-CGI
+BuildRequires:	python-devel
+BuildRequires:	xmlto
+BuildRequires:	zlib-devel
+BuildRequires:	docbook-dtd45-xml
+BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}
+Requires:	git-core = %{epoch}:%{version}
+Requires:	gitk = %{epoch}:%{version}
+Requires:	git-svn = %{epoch}:%{version}
+Requires:	git-email = %{epoch}:%{version}
+Suggests:	git-arch = %{epoch}:%{version}
+Suggests:	git-core-oldies = %{epoch}:%{version}
+Suggests:	git-cvs = %{epoch}:%{version}
 
 %description
 This is a stupid (but extremely fast) directory content manager.  It
@@ -51,16 +45,16 @@ elsewhere for tools for ordinary humans layered on top of this.
 This is a dummy package which brings in all subpackages.
 
 %package -n git-core
-Summary: Global Information Tracker
-Group: Development/Other
-Requires: diffutils
-Requires: rsync
-Requires: less
-Requires: openssh-clients
-Suggests: git-prompt
-Conflicts: git < 4.3.20-15
-Obsoletes: gitcompletion
-Provides: gitcompletion
+Summary:	Global Information Tracker
+Group:		Development/Other
+Requires:	diffutils
+Requires:	rsync
+Requires:	less
+Requires:	openssh-clients
+Suggests:	git-prompt
+Conflicts:	git < 4.3.20-15
+Obsoletes:	gitcompletion
+Provides:	gitcompletion
 
 %description -n git-core
 This is a stupid (but extremely fast) directory content manager.  It
@@ -76,38 +70,38 @@ You may want to install subversion, cpsps and/or tla to import
 repositories from other VCS.
 
 %package -n gitk
-Summary: Git revision tree visualiser
-Group: Development/Other
-Requires: git-core = %{epoch}:%{version}
-Requires: tk >= 8.4
-Requires: tcl >= 8.4
+Summary:	Git revision tree visualiser
+Group:		Development/Other
+Requires:	git-core = %{epoch}:%{version}
+Requires:	tk >= 8.4
+Requires:	tcl >= 8.4
 
 %description -n gitk
 Git revision tree visualiser.
 
 %package -n gitview
-Summary: Git graphical revision tree visualiser
-Group: Development/Other
-Requires: git-core = %{epoch}:%{version}
-Requires: python-cairo
-Requires: pygtk2.0
-Requires: python-gtksourceview
+Summary:	Git graphical revision tree visualiser
+Group:		Development/Other
+Requires:	git-core = %{epoch}:%{version}
+Requires:	python-cairo
+Requires:	pygtk2.0
+Requires:	python-gtksourceview
 
 %description -n gitview
 Git graphical revision tree visualiser.
 
 %package -n %{libname}-devel
-Summary: Git development files
-Group: Development/Other
-Provides: git-devel = %{version}-%{release}
+Summary:	Git development files
+Group:		Development/Other
+Provides:	git-devel = %{version}-%{release}
 
 %description -n %{libname}-devel
 Development files for git.
 
 %package -n git-svn
-Summary:        Git tools for importing Subversion repositories
-Group:          Development/Other
-Requires:       git-core = %{epoch}:%{version}-%{release}, subversion
+Summary:	Git tools for importing Subversion repositories
+Group:		Development/Other
+Requires:	git-core = %{epoch}:%{version}-%{release}, subversion
 Requires:	perl-Git
 Requires:	perl-SVN
 
@@ -115,27 +109,27 @@ Requires:	perl-SVN
 Git tools for importing Subversion repositories.
 
 %package -n git-cvs
-Summary:        Git tools for importing CVS repositories
-Group:          Development/Other
-Requires:       git-core = %{epoch}:%{version}-%{release}
-Suggests: 	cvs, cvsps
+Summary:	Git tools for importing CVS repositories
+Group:		Development/Other
+Requires:	git-core = %{epoch}:%{version}-%{release}
+Suggests:	cvs, cvsps
 
 %description -n git-cvs
 Git tools for importing CVS repositories.
 
 %package -n git-arch
-Summary:        Git tools for importing Arch repositories
-Group:          Development/Other
-Requires:       git-core = %{epoch}:%{version}-%{release}
+Summary:	Git tools for importing Arch repositories
+Group:		Development/Other
+Requires:	git-core = %{epoch}:%{version}-%{release}
 Suggests:	tla
 
 %description -n git-arch
 Git tools for importing Arch repositories.
 
 %package -n git-email
-Summary:        Git tools for sending email
-Group:          Development/Other
-Requires:       git-core = %{epoch}:%{version}-%{release}
+Summary:	Git tools for sending email
+Group:		Development/Other
+Requires:	git-core = %{epoch}:%{version}-%{release}
 Suggests:	perl-Authen-SASL
 Suggests:	perl-MIME-Base64
 
@@ -143,17 +137,17 @@ Suggests:	perl-MIME-Base64
 Git tools for sending email.
 
 %package -n perl-Git
-Summary:        Perl interface to Git
-Group:          Development/Perl
-Requires:       git-core = %{epoch}:%{version}-%{release}
+Summary:	Perl interface to Git
+Group:		Development/Perl
+Requires:	git-core = %{epoch}:%{version}-%{release}
 
 %description -n perl-Git
 Perl interface to Git
 
 %package -n python-git
-Summary:        Python interface to Git
-Group:          Development/Python
-Requires:       git-core = %{epoch}:%{version}-%{release}
+Summary:	Python interface to Git
+Group:		Development/Python
+Requires:	git-core = %{epoch}:%{version}-%{release}
 
 %description -n python-git
 Python interface to Git
@@ -175,10 +169,10 @@ Requires:	git-core = %{epoch}:%{version}-%{release}
 cgi-bin script for browse a git repository with web browser.
 
 %package -n git-prompt
-Summary:        Shows the current git branch in your bash prompt
-Group:          Shells
-Requires:       git-core = %{epoch}:%{version}-%{release}
-Requires:       bash-completion
+Summary:	Shows the current git branch in your bash prompt
+Group:		Shells
+Requires:	git-core = %{epoch}:%{version}-%{release}
+Requires:	bash-completion
 
 %description -n git-prompt
 Shows the current git branch in your bash prompt.
@@ -268,16 +262,6 @@ LC_ALL=C %make %git_make_params test
 %clean
 rm -rf %{buildroot}
 
-%post -n gitweb
-%if %mdkversion < 201010
-%_post_webapp
-%endif
-
-%postun -n gitweb
-%if %mdkversion < 201010
-%_postun_webapp
-%endif
-
 %files
 # no file in the main package
 
@@ -293,10 +277,8 @@ rm -rf %{buildroot}
 %exclude %{_libdir}/git-core/*cvs*
 %exclude %{_libdir}/git-core/git-archimport
 %exclude %{_libdir}/git-core/*email*
-# %exclude %{_bindir}/git-merge-recursive-old
 %{_datadir}/git-core
 %{_datadir}/git-gui
-# %exclude %{_datadir}/git-core/python
 %{_mandir}/*/git-*
 %{_mandir}/*/git.*
 %{_mandir}/*/gitattributes*
@@ -339,37 +321,27 @@ rm -rf %{buildroot}
 %defattr(-,root,root)
 %{_libdir}/git-core/*svn*
 %{_mandir}/man1/*svn*.1*
-# %doc Documentation/*svn*.txt
-# %doc Documentation/*svn*.html
 
 %files -n git-cvs
 %defattr(-,root,root)
 %{_libdir}/git-core/*cvs*
 %{_mandir}/man1/*cvs*.1*
 %{_mandir}/man7/*cvs*.7*
-# %doc Documentation/*git-cvs*.txt
-# %doc Documentation/*git-cvs*.html
 
 %files -n git-arch
 %defattr(-,root,root)
 %{_libdir}/git-core/git-archimport
 %{_mandir}/man1/git-archimport.1*
-# %doc Documentation/git-archimport.txt
-# %doc Documentation/git-archimport.html
 
 %files -n git-email
 %defattr(-,root,root)
 %{_libdir}/git-core/*email*
 %{_mandir}/man1/*email*.1*
-# %doc Documentation/*email*.txt
-# %doc Documentation/*email*.html
 
 %files -n perl-Git
 %defattr(-,root,root)
 %{perl_vendorlib}/*
 %{_mandir}/man3/*
-# /usr/lib/perl5/site_perl/5.8.8/Git.pm
-# /usr/local/share/man/man3/Git.3pm
 
 %files -n python-git
 %defattr(-,root,root)
@@ -377,8 +349,6 @@ rm -rf %{buildroot}
 
 %files -n git-core-oldies
 %defattr(-,root,root,0755)
-# %{_bindir}/git-merge-recursive-old
-# %{_datadir}/git-core/python
 
 %files -n gitweb
 %defattr(-,root,root,0755)
@@ -386,6 +356,8 @@ rm -rf %{buildroot}
 %config(noreplace) %{_sysconfdir}/gitweb.conf
 %config(noreplace) %{_webappconfdir}/gitweb.conf
 %{_datadir}/gitweb
+%{_mandir}/man1/gitweb.1*
+%{_mandir}/man5/gitweb.conf.5*
 
 %files -n git-prompt
 %defattr(-,root,root,0755)
