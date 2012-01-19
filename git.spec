@@ -311,6 +311,7 @@ LC_ALL=C %make %git_make_params test
 %{_libdir}/libgit.a
 
 %files -n git-svn
+%{_libdir}/git-core/*svn*
 %{_mandir}/man1/*svn*.1*
 
 %files -n git-cvs
