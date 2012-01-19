@@ -3,10 +3,10 @@
 %define profile_env	93git-env.sh
 
 Name:		git
-Version:	1.7.8
+Epoch:		1
+Version:	1.7.8.4
 # 1.7.8 still builds fine in 2010.2 so keep mkrel for backports sake
 Release:	%mkrel 1
-Epoch:		1
 Summary:	Global Information Tracker
 License:	GPLv2
 Group:		Development/Other
@@ -25,14 +25,14 @@ BuildRequires:	python-devel
 BuildRequires:	xmlto
 BuildRequires:	zlib-devel
 BuildRequires:	docbook-dtd45-xml
-BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}
-Requires:	git-core = %{epoch}:%{version}
-Requires:	gitk = %{epoch}:%{version}
-Requires:	git-svn = %{epoch}:%{version}
-Requires:	git-email = %{epoch}:%{version}
-Suggests:	git-arch = %{epoch}:%{version}
-Suggests:	git-core-oldies = %{epoch}:%{version}
-Suggests:	git-cvs = %{epoch}:%{version}
+
+Requires:	git-core = %{EVRD}
+Requires:	gitk = %{EVRD}
+Requires:	git-svn = %{EVRD}
+Requires:	git-email = %{EVRD}
+Suggests:	git-arch = %{EVRD}
+Suggests:	git-core-oldies = %{EVRD}
+Suggests:	git-cvs = %{EVRD}
 
 %description
 This is a stupid (but extremely fast) directory content manager.  It
@@ -72,7 +72,7 @@ repositories from other VCS.
 %package -n gitk
 Summary:	Git revision tree visualiser
 Group:		Development/Other
-Requires:	git-core = %{epoch}:%{version}
+Requires:	git-core = %{EVRD}
 Requires:	tk >= 8.4
 Requires:	tcl >= 8.4
 
@@ -82,7 +82,7 @@ Git revision tree visualiser.
 %package -n gitview
 Summary:	Git graphical revision tree visualiser
 Group:		Development/Other
-Requires:	git-core = %{epoch}:%{version}
+Requires:	git-core = %{EVRD}
 Requires:	python-cairo
 Requires:	pygtk2.0
 Requires:	python-gtksourceview
@@ -101,7 +101,7 @@ Development files for git.
 %package -n git-svn
 Summary:	Git tools for importing Subversion repositories
 Group:		Development/Other
-Requires:	git-core = %{epoch}:%{version}-%{release}, subversion
+Requires:	git-core = %{EVRD}, subversion
 Requires:	perl-Git
 Requires:	perl-SVN
 
@@ -111,7 +111,7 @@ Git tools for importing Subversion repositories.
 %package -n git-cvs
 Summary:	Git tools for importing CVS repositories
 Group:		Development/Other
-Requires:	git-core = %{epoch}:%{version}-%{release}
+Requires:	git-core = %{EVRD}
 Suggests:	cvs, cvsps
 
 %description -n git-cvs
@@ -120,7 +120,7 @@ Git tools for importing CVS repositories.
 %package -n git-arch
 Summary:	Git tools for importing Arch repositories
 Group:		Development/Other
-Requires:	git-core = %{epoch}:%{version}-%{release}
+Requires:	git-core = %{EVRD}
 Suggests:	tla
 
 %description -n git-arch
@@ -129,7 +129,7 @@ Git tools for importing Arch repositories.
 %package -n git-email
 Summary:	Git tools for sending email
 Group:		Development/Other
-Requires:	git-core = %{epoch}:%{version}-%{release}
+Requires:	git-core = %{EVRD}
 Suggests:	perl-Authen-SASL
 Suggests:	perl-MIME-Base64
 
@@ -139,7 +139,7 @@ Git tools for sending email.
 %package -n perl-Git
 Summary:	Perl interface to Git
 Group:		Development/Perl
-Requires:	git-core = %{epoch}:%{version}-%{release}
+Requires:	git-core = %{EVRD}
 
 %description -n perl-Git
 Perl interface to Git
@@ -147,7 +147,7 @@ Perl interface to Git
 %package -n python-git
 Summary:	Python interface to Git
 Group:		Development/Python
-Requires:	git-core = %{epoch}:%{version}-%{release}
+Requires:	git-core = %{EVRD}
 
 %description -n python-git
 Python interface to Git
@@ -155,7 +155,7 @@ Python interface to Git
 %package -n git-core-oldies
 Summary:	Git obsolete commands, bound to extinction
 Group:		Development/Other
-Requires:	git-core = %{epoch}:%{version}-%{release}
+Requires:	git-core = %{EVRD}
 
 %description -n git-core-oldies
 Git obsolete commands, bound to extinction
@@ -163,7 +163,7 @@ Git obsolete commands, bound to extinction
 %package -n gitweb
 Summary:	cgi-bin script for browse a git repository with web browser
 Group:		System/Servers
-Requires:	git-core = %{epoch}:%{version}-%{release}
+Requires:	git-core = %{EVRD}
 
 %description -n gitweb
 cgi-bin script for browse a git repository with web browser.
@@ -171,14 +171,14 @@ cgi-bin script for browse a git repository with web browser.
 %package -n git-prompt
 Summary:	Shows the current git branch in your bash prompt
 Group:		Shells
-Requires:	git-core = %{epoch}:%{version}-%{release}
+Requires:	git-core = %{EVRD}
 Requires:	bash-completion
 
 %description -n git-prompt
 Shows the current git branch in your bash prompt.
 
 %prep
-%setup -q -n git-%{version}
+%setup -q
 # remove borring file
 rm -f Documentation/.gitignore
 # prefix gitweb css/png files with /gitweb
@@ -259,14 +259,10 @@ install -D -m 0644 %{SOURCE3} %{buildroot}%{_sysconfdir}/profile.d/%{profile_bra
 %check
 LC_ALL=C %make %git_make_params test
 
-%clean
-rm -rf %{buildroot}
-
 %files
 # no file in the main package
 
 %files -n git-core
-%defattr(-,root,root,0755)
 /etc/emacs/site-start.d/*
 /etc/bash_completion.d/*
 %{_datadir}/emacs/site-lisp/*
@@ -301,57 +297,45 @@ rm -rf %{buildroot}
 %doc README Documentation/*.html Documentation/howto Documentation/technical Documentation/RelNotes.txt.gz
 
 %files -n gitk
-%defattr(-,root,root,0755)
+%doc README
 %{_bindir}/gitk
 %{_mandir}/*/gitk*
 %{_datadir}/gitk
-%doc README
 
 %files -n gitview
-%defattr(-,root,root,0755)
 %doc contrib/gitview/gitview.txt
 %{_bindir}/gitview
 
 %files -n %{libname}-devel	
-%defattr(-,root,root,0755)
 %{_includedir}/git
 %{_libdir}/libgit.a
 
 %files -n git-svn
-%defattr(-,root,root)
-%{_libdir}/git-core/*svn*
 %{_mandir}/man1/*svn*.1*
 
 %files -n git-cvs
-%defattr(-,root,root)
 %{_libdir}/git-core/*cvs*
 %{_mandir}/man1/*cvs*.1*
 %{_mandir}/man7/*cvs*.7*
 
 %files -n git-arch
-%defattr(-,root,root)
 %{_libdir}/git-core/git-archimport
 %{_mandir}/man1/git-archimport.1*
 
 %files -n git-email
-%defattr(-,root,root)
 %{_libdir}/git-core/*email*
 %{_mandir}/man1/*email*.1*
 
 %files -n perl-Git
-%defattr(-,root,root)
 %{perl_vendorlib}/*
 %{_mandir}/man3/*
 
 %files -n python-git
-%defattr(-,root,root)
 %{py_puresitedir}/*
 
 %files -n git-core-oldies
-%defattr(-,root,root,0755)
 
 %files -n gitweb
-%defattr(-,root,root,0755)
 %doc gitweb/INSTALL gitweb/README
 %config(noreplace) %{_sysconfdir}/gitweb.conf
 %config(noreplace) %{_webappconfdir}/gitweb.conf
@@ -360,5 +344,4 @@ rm -rf %{buildroot}
 %{_mandir}/man5/gitweb.conf.5*
 
 %files -n git-prompt
-%defattr(-,root,root,0755)
 %{_sysconfdir}/profile.d/%{profile_branch}
