@@ -4,9 +4,9 @@
 
 Name:		git
 Epoch:		1
-Version:	1.7.8.4
+Version:	1.7.9
 # 1.7.8 still builds fine in 2010.2 so keep mkrel for backports sake
-Release:	%mkrel 2
+Release:	%mkrel 1
 Summary:	Global Information Tracker
 License:	GPLv2
 Group:		Development/Other
@@ -187,7 +187,7 @@ perl -pi -e 's!^(GITWEB_CSS|GITWEB_LOGO|GITWEB_FAVICON) = !$1 = /gitweb/!' Makef
 %build
 # same flags and prefix must be passed for make test too
 %define git_make_params prefix=%{_prefix} gitexecdir=%{_libdir}/git-core CFLAGS="%{optflags}" GITWEB_CONFIG=%{_sysconfdir}/gitweb.conf DOCBOOK_XSL_172=1
-%make %git_make_params all doc gitweb/gitweb.cgi
+%make %{git_make_params} all doc gitweb/gitweb.cgi
 
 # Produce RelNotes.txt.gz
 # sed trick changes "-x.y.z.txt" to "-x.y.z.0.txt" for ordering, then undoes it
@@ -197,34 +197,34 @@ cd Documentation/RelNotes \
 && awk 'FNR == 1 { print "" } { print }' $relnotesls | gzip -9c >../RelNotes.txt.gz
 
 %install
-rm -rf %{buildroot}
-mkdir -p %{buildroot}%{_bindir}
+%__rm -rf %{buildroot}
+%__mkdir_p %{buildroot}%{_bindir}
 %makeinstall_std prefix=%{_prefix} gitexecdir=%{_libdir}/git-core  CFLAGS="%{optflags}"
 make install-doc prefix=%{_prefix} gitexecdir=%{_libdir}/git-core   DESTDIR=%{buildroot}
 # (cg) Copy the whole contrib dir as docs. It contains useful scripts.
-mkdir -p %{buildroot}%{_datadir}/doc/git-core
-cp -ar contrib %{buildroot}%{_datadir}/doc/git-core
+%__mkdir_p %{buildroot}%{_datadir}/doc/git-core
+%__cp -ar contrib %{buildroot}%{_datadir}/doc/git-core
 # (cg) Even tho' we copy the whole contrib dir, copy this rather than symlink incase the user is excluding docs
-install -m 755 contrib/gitview/gitview %{buildroot}%{_bindir}
+%__install -m 755 contrib/gitview/gitview %{buildroot}%{_bindir}
 
-mkdir -p %{buildroot}%{_includedir}/git
-cp *.h %{buildroot}%{_includedir}/git
+%__mkdir_p %{buildroot}%{_includedir}/git
+%__cp *.h %{buildroot}%{_includedir}/git
 
-mkdir -p %{buildroot}%{_libdir}
-install -m 644 libgit.a %{buildroot}%{_libdir}/libgit.a
+%__mkdir_p %{buildroot}%{_libdir}
+%__install -m 644 libgit.a %{buildroot}%{_libdir}/libgit.a
 
-mv %{buildroot}/%{_prefix}/lib/perl5/site_perl %{buildroot}/%{_prefix}/lib/perl5/vendor_perl
-rm -f %{buildroot}/%{perl_vendorlib}/Error.pm
+%__mv %{buildroot}/%{_prefix}/lib/perl5/site_perl %{buildroot}/%{_prefix}/lib/perl5/vendor_perl
+%__rm -f %{buildroot}/%{perl_vendorlib}/Error.pm
 
-mkdir -p %{buildroot}%{_datadir}/gitweb/static
-install -m 755 gitweb/gitweb.cgi %{buildroot}%{_datadir}/gitweb
-install -m 644 gitweb/static/*.css gitweb/static/*.png %{buildroot}%{_datadir}/gitweb/static/
+%__mkdir_p %{buildroot}%{_datadir}/gitweb/static
+%__install -m 755 gitweb/gitweb.cgi %{buildroot}%{_datadir}/gitweb
+%__install -m 644 gitweb/static/*.css gitweb/static/*.png %{buildroot}%{_datadir}/gitweb/static/
 
-mkdir -p %{buildroot}%{_sysconfdir}
-install -m644 %{SOURCE2} %{buildroot}%{_sysconfdir}/gitweb.conf
+%__mkdir_p %{buildroot}%{_sysconfdir}
+%__install -m644 %{SOURCE2} %{buildroot}%{_sysconfdir}/gitweb.conf
 # apache configuration
-mkdir -p %{buildroot}%{_webappconfdir}
-cat > %{buildroot}%{_webappconfdir}/gitweb.conf <<EOF
+%__mkdir_p %{buildroot}%{_webappconfdir}
+%__cat > %{buildroot}%{_webappconfdir}/gitweb.conf <<EOF
 # gitweb configuration
 Alias /gitweb %{_datadir}/gitweb
 
@@ -240,29 +240,31 @@ EOF
 find %{buildroot}/%{_mandir} -type f | xargs perl -e 's/\.sp$/\n\.sp/g' -pi
 
 # emacs VC backend:
-mkdir -p %{buildroot}{%{_datadir}/emacs/site-lisp,/etc/emacs/site-start.d}
-install -m 644 contrib/emacs/*.el %{buildroot}%{_datadir}/emacs/site-lisp
-cat >%{buildroot}/etc/emacs/site-start.d/vc_git.el <<EOF
+%__mkdir_p %{buildroot}{%{_datadir}/emacs/site-lisp,/etc/emacs/site-start.d}
+%__install -m 644 contrib/emacs/*.el %{buildroot}%{_datadir}/emacs/site-lisp
+%__cat >%{buildroot}/etc/emacs/site-start.d/vc_git.el <<EOF
 (add-to-list 'vc-handled-backends 'GIT)
 EOF
 
 # install bash-completion file
-mkdir -p  %{buildroot}%{_sysconfdir}/bash_completion.d
-install -m644 contrib/completion/git-completion.bash \
+%__mkdir_p %{buildroot}%{_sysconfdir}/bash_completion.d
+%__install -m644 contrib/completion/git-completion.bash \
     %{buildroot}%{_sysconfdir}/bash_completion.d/git
 
 # And the prompt manipulation file
-install -D -m 0644 %{SOURCE3} %{buildroot}%{_sysconfdir}/profile.d/%{profile_branch}
+%__install -D -m 0644 %{SOURCE3} %{buildroot}%{_sysconfdir}/profile.d/%{profile_branch}
 # exposes a bug in less, as reported by coling
 #install -D -m 0644 %SOURCE4 %{buildroot}%{_sysconfdir}/profile.d/%{profile_env}
 
+%find_lang %{name}
+
 %check
-LC_ALL=C %make %git_make_params test
+LC_ALL=C %make %{git_make_params} test
 
 %files
 # no file in the main package
 
-%files -n git-core
+%files -n git-core -f %{name}.lang
 /etc/emacs/site-start.d/*
 /etc/bash_completion.d/*
 %{_datadir}/emacs/site-lisp/*
@@ -289,6 +291,7 @@ LC_ALL=C %make %git_make_params test
 %{_mandir}/*/gitdiffcore*
 %{_mandir}/*/gitworkflows*
 %{_mandir}/*/gitrevisions*
+%{_mandir}/*/gitcredentials*
 %exclude %{_mandir}/man1/*svn*.1*
 %exclude %{_mandir}/man1/*cvs*.1*
 %exclude %{_mandir}/man7/*cvs*.7*
@@ -306,7 +309,7 @@ LC_ALL=C %make %git_make_params test
 %doc contrib/gitview/gitview.txt
 %{_bindir}/gitview
 
-%files -n %{libname}-devel	
+%files -n %{libname}-devel
 %{_includedir}/git
 %{_libdir}/libgit.a
 
