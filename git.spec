@@ -4,14 +4,14 @@
 
 Name:		git
 Epoch:		1
-Version:	1.7.9
+Version:	1.7.9.2
 # 1.7.8 still builds fine in 2010.2 so keep mkrel for backports sake
 Release:	%mkrel 1
 Summary:	Global Information Tracker
 License:	GPLv2
 Group:		Development/Other
 Url:		http://git-scm.com/
-Source0:	http://www.kernel.org/pub/software/scm/git/git-%{version}.tar.gz
+Source0:	http://git-core.googlecode.com/files/git-%version.tar.gz
 Source2:	gitweb.conf
 Source3:	%{profile_branch}
 # Do we really need it? It's not used anyway
