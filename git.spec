@@ -20,7 +20,7 @@ BuildRequires:	asciidoc
 BuildRequires:	curl-devel
 BuildRequires:	expat-devel
 BuildRequires:	openssl-devel
-BuildRequires:	perl-CGI
+BuildRequires:	perl-CGI perl-devel
 BuildRequires:	python-devel
 BuildRequires:	xmlto
 BuildRequires:	zlib-devel
