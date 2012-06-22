@@ -4,7 +4,7 @@
 
 Name:		git
 Epoch:		1
-Version:	1.7.9.2
+Version:	1.7.11
 # 1.7.8 still builds fine in 2010.2 so keep mkrel for backports sake
 Release:	%mkrel 1
 Summary:	Global Information Tracker
@@ -203,7 +203,7 @@ cd Documentation/RelNotes \
 make install-doc prefix=%{_prefix} gitexecdir=%{_libdir}/git-core   DESTDIR=%{buildroot}
 # (cg) Copy the whole contrib dir as docs. It contains useful scripts.
 %__mkdir_p %{buildroot}%{_datadir}/doc/git-core
-%__cp -ar contrib %{buildroot}%{_datadir}/doc/git-core
+cp -ar contrib %{buildroot}%{_datadir}/doc/git-core
 # (cg) Even tho' we copy the whole contrib dir, copy this rather than symlink incase the user is excluding docs
 %__install -m 755 contrib/gitview/gitview %{buildroot}%{_bindir}
 
@@ -259,7 +259,10 @@ EOF
 %find_lang %{name}
 
 %check
-LC_ALL=C %make %{git_make_params} test
+# We do NO_SVN_TESTS because git's tests hardcode
+# replies from svn versions older than the one
+# we're shipping -- and they have changed since
+LC_ALL=C %make %{git_make_params} test NO_SVN_TESTS=true
 
 %files
 # no file in the main package
