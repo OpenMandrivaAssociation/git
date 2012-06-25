@@ -108,6 +108,14 @@ Requires:	perl-SVN
 %description -n git-svn
 Git tools for importing Subversion repositories.
 
+%package mediawiki
+Summary:	Tools for importing and exporting git repositories to MediaWiki
+Group:		Development/Other
+Requires:	git-core = %{EVRD}
+
+%description mediawiki
+Tools for importing and exporting git repositories to MediaWiki
+
 %package -n git-cvs
 Summary:	Git tools for importing CVS repositories
 Group:		Development/Other
@@ -273,6 +281,7 @@ LC_ALL=C %make %{git_make_params} test NO_SVN_TESTS=true
 %{_datadir}/emacs/site-lisp/*
 %{_bindir}/git
 %{_bindir}/git-*
+%exclude %_bindir/git-remote-mediawiki
 %{_libdir}/git-core
 %exclude %{_libdir}/git-core/*svn*
 %exclude %{_libdir}/git-core/*cvs*
@@ -319,6 +328,9 @@ LC_ALL=C %make %{git_make_params} test NO_SVN_TESTS=true
 %files -n git-svn
 %{_libdir}/git-core/*svn*
 %{_mandir}/man1/*svn*.1*
+
+%files mediawiki
+%_bindir/git-remote-mediawiki
 
 %files -n git-cvs
 %{_libdir}/git-core/*cvs*
