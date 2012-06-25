@@ -6,7 +6,7 @@ Name:		git
 Epoch:		1
 Version:	1.7.11
 # 1.7.8 still builds fine in 2010.2 so keep mkrel for backports sake
-Release:	%mkrel 1
+Release:	%mkrel 2
 Summary:	Global Information Tracker
 License:	GPLv2
 Group:		Development/Other
