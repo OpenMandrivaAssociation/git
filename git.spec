@@ -108,14 +108,6 @@ Requires:	perl-SVN
 %description -n git-svn
 Git tools for importing Subversion repositories.
 
-%package mediawiki
-Summary:	Tools for importing and exporting git repositories to MediaWiki
-Group:		Development/Other
-Requires:	git-core = %{EVRD}
-
-%description mediawiki
-Tools for importing and exporting git repositories to MediaWiki
-
 %package -n git-cvs
 Summary:	Git tools for importing CVS repositories
 Group:		Development/Other
@@ -209,6 +201,10 @@ cd Documentation/RelNotes \
 %__mkdir_p %{buildroot}%{_bindir}
 %makeinstall_std prefix=%{_prefix} gitexecdir=%{_libdir}/git-core  CFLAGS="%{optflags}"
 make install-doc prefix=%{_prefix} gitexecdir=%{_libdir}/git-core   DESTDIR=%{buildroot}
+
+# Avoid dependencies on obscure perl modules
+chmod -x contrib/mw-to-git/git-remote-mediawiki
+
 # (cg) Copy the whole contrib dir as docs. It contains useful scripts.
 %__mkdir_p %{buildroot}%{_datadir}/doc/git-core
 cp -ar contrib %{buildroot}%{_datadir}/doc/git-core
@@ -261,6 +257,7 @@ EOF
 
 # And the prompt manipulation file
 %__install -D -m 0644 %{SOURCE3} %{buildroot}%{_sysconfdir}/profile.d/%{profile_branch}
+
 # exposes a bug in less, as reported by coling
 #install -D -m 0644 %SOURCE4 %{buildroot}%{_sysconfdir}/profile.d/%{profile_env}
 
@@ -281,7 +278,6 @@ LC_ALL=C %make %{git_make_params} test NO_SVN_TESTS=true
 %{_datadir}/emacs/site-lisp/*
 %{_bindir}/git
 %{_bindir}/git-*
-%exclude %_bindir/git-remote-mediawiki
 %{_libdir}/git-core
 %exclude %{_libdir}/git-core/*svn*
 %exclude %{_libdir}/git-core/*cvs*
@@ -328,9 +324,6 @@ LC_ALL=C %make %{git_make_params} test NO_SVN_TESTS=true
 %files -n git-svn
 %{_libdir}/git-core/*svn*
 %{_mandir}/man1/*svn*.1*
-
-%files mediawiki
-%_bindir/git-remote-mediawiki
 
 %files -n git-cvs
 %{_libdir}/git-core/*cvs*
