@@ -1,0 +1,5 @@
+sources:
+  "93git-branch.sh:"	b6efcd6d9085ab2ba2ec5cd464502ebac1872a43
+  "93git-env.sh:"	4aa5e78f1327f9b8a4d970f64a65b67be150b43c
+  "git-1.7.11.3.tar.gz:"	a10c420e4d9152d6059f41825904cfac3062b135
+  "gitweb.conf:"	d56084a555e22f4490b7178d354db5e5822c5fc5
