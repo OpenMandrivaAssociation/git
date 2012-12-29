@@ -4,7 +4,7 @@
 
 Name:		git
 Epoch:		1
-Version:	1.7.11.3
+Version:	1.8.0.3
 # 1.7.8 still builds fine in 2010.2 so keep mkrel for backports sake
 Release:	%mkrel 1
 Summary:	Global Information Tracker
@@ -25,6 +25,7 @@ BuildRequires:	python-devel
 BuildRequires:	xmlto
 BuildRequires:	zlib-devel
 BuildRequires:	docbook-dtd45-xml
+BuildRequires:	perl(JSON::PP)
 
 Requires:	git-core = %{EVRD}
 Requires:	gitk = %{EVRD}
