@@ -4,7 +4,7 @@
 
 Name:		git
 Epoch:		1
-Version:	1.8.0.3
+Version:	1.8.1
 # 1.7.8 still builds fine in 2010.2 so keep mkrel for backports sake
 Release:	%mkrel 1
 Summary:	Global Information Tracker
