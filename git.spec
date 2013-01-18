@@ -4,28 +4,29 @@
 
 Name:		git
 Epoch:		1
-Version:	1.8.1
-# 1.7.8 still builds fine in 2010.2 so keep mkrel for backports sake
-Release:	%mkrel 1
+Version:	1.8.1.1
+Release:	1
 Summary:	Global Information Tracker
 License:	GPLv2
 Group:		Development/Other
 Url:		http://git-scm.com/
-Source0:	http://git-core.googlecode.com/files/git-%version.tar.gz
+Source0:	http://git-core.googlecode.com/files/%{name}-%{version}.tar.gz
 Source2:	gitweb.conf
 Source3:	%{profile_branch}
 # Do we really need it? It's not used anyway
 Source4:	%{profile_env}
+
 BuildRequires:	asciidoc
-BuildRequires:	curl-devel
-BuildRequires:	expat-devel
-BuildRequires:	openssl-devel
-BuildRequires:	perl-CGI perl-devel
-BuildRequires:	python-devel
-BuildRequires:	xmlto
-BuildRequires:	zlib-devel
 BuildRequires:	docbook-dtd45-xml
+BuildRequires:	perl-CGI
+BuildRequires:	xmlto
+BuildRequires:	expat-devel
+BuildRequires:	perl-devel
 BuildRequires:	perl(JSON::PP)
+BuildRequires:	pkgconfig(libcurl)
+BuildRequires:	pkgconfig(openssl)
+BuildRequires:	pkgconfig(python)
+BuildRequires:	pkgconfig(zlib)
 
 Requires:	git-core = %{EVRD}
 Requires:	gitk = %{EVRD}
@@ -53,9 +54,6 @@ Requires:	rsync
 Requires:	less
 Requires:	openssh-clients
 Suggests:	git-prompt
-Conflicts:	git < 4.3.20-15
-Obsoletes:	gitcompletion
-Provides:	gitcompletion
 
 %description -n git-core
 This is a stupid (but extremely fast) directory content manager.  It
@@ -113,7 +111,8 @@ Git tools for importing Subversion repositories.
 Summary:	Git tools for importing CVS repositories
 Group:		Development/Other
 Requires:	git-core = %{EVRD}
-Suggests:	cvs, cvsps
+Suggests:	cvs
+Suggests:	cvsps
 
 %description -n git-cvs
 Git tools for importing CVS repositories.
@@ -198,8 +197,7 @@ cd Documentation/RelNotes \
 && awk 'FNR == 1 { print "" } { print }' $relnotesls | gzip -9c >../RelNotes.txt.gz
 
 %install
-%__rm -rf %{buildroot}
-%__mkdir_p %{buildroot}%{_bindir}
+mkdir -p %{buildroot}%{_bindir}
 %makeinstall_std prefix=%{_prefix} gitexecdir=%{_libdir}/git-core  CFLAGS="%{optflags}"
 make install-doc prefix=%{_prefix} gitexecdir=%{_libdir}/git-core   DESTDIR=%{buildroot}
 
@@ -207,29 +205,29 @@ make install-doc prefix=%{_prefix} gitexecdir=%{_libdir}/git-core   DESTDIR=%{bu
 chmod -x contrib/mw-to-git/git-remote-mediawiki
 
 # (cg) Copy the whole contrib dir as docs. It contains useful scripts.
-%__mkdir_p %{buildroot}%{_datadir}/doc/git-core
+mkdir -p %{buildroot}%{_datadir}/doc/git-core
 cp -ar contrib %{buildroot}%{_datadir}/doc/git-core
 # (cg) Even tho' we copy the whole contrib dir, copy this rather than symlink incase the user is excluding docs
-%__install -m 755 contrib/gitview/gitview %{buildroot}%{_bindir}
+install -m 755 contrib/gitview/gitview %{buildroot}%{_bindir}
 
-%__mkdir_p %{buildroot}%{_includedir}/git
-%__cp *.h %{buildroot}%{_includedir}/git
+mkdir -p %{buildroot}%{_includedir}/git
+cp *.h %{buildroot}%{_includedir}/git
 
-%__mkdir_p %{buildroot}%{_libdir}
-%__install -m 644 libgit.a %{buildroot}%{_libdir}/libgit.a
+mkdir -p %{buildroot}%{_libdir}
+install -m 644 libgit.a %{buildroot}%{_libdir}/libgit.a
 
-%__mv %{buildroot}/%{_prefix}/lib/perl5/site_perl %{buildroot}/%{_prefix}/lib/perl5/vendor_perl
-%__rm -f %{buildroot}/%{perl_vendorlib}/Error.pm
+mv %{buildroot}/%{_prefix}/lib/perl5/site_perl %{buildroot}/%{_prefix}/lib/perl5/vendor_perl
+rm -f %{buildroot}/%{perl_vendorlib}/Error.pm
 
-%__mkdir_p %{buildroot}%{_datadir}/gitweb/static
-%__install -m 755 gitweb/gitweb.cgi %{buildroot}%{_datadir}/gitweb
-%__install -m 644 gitweb/static/*.css gitweb/static/*.png %{buildroot}%{_datadir}/gitweb/static/
+mkdir -p %{buildroot}%{_datadir}/gitweb/static
+install -m 755 gitweb/gitweb.cgi %{buildroot}%{_datadir}/gitweb
+install -m 644 gitweb/static/*.css gitweb/static/*.png %{buildroot}%{_datadir}/gitweb/static/
 
-%__mkdir_p %{buildroot}%{_sysconfdir}
-%__install -m644 %{SOURCE2} %{buildroot}%{_sysconfdir}/gitweb.conf
+mkdir -p %{buildroot}%{_sysconfdir}
+install -m644 %{SOURCE2} %{buildroot}%{_sysconfdir}/gitweb.conf
 # apache configuration
-%__mkdir_p %{buildroot}%{_webappconfdir}
-%__cat > %{buildroot}%{_webappconfdir}/gitweb.conf <<EOF
+mkdir -p %{buildroot}%{_webappconfdir}
+cat > %{buildroot}%{_webappconfdir}/gitweb.conf <<EOF
 # gitweb configuration
 Alias /gitweb %{_datadir}/gitweb
 
@@ -245,19 +243,19 @@ EOF
 find %{buildroot}/%{_mandir} -type f | xargs perl -e 's/\.sp$/\n\.sp/g' -pi
 
 # emacs VC backend:
-%__mkdir_p %{buildroot}{%{_datadir}/emacs/site-lisp,/etc/emacs/site-start.d}
-%__install -m 644 contrib/emacs/*.el %{buildroot}%{_datadir}/emacs/site-lisp
-%__cat >%{buildroot}/etc/emacs/site-start.d/vc_git.el <<EOF
+mkdir -p %{buildroot}{%{_datadir}/emacs/site-lisp,/etc/emacs/site-start.d}
+install -m 644 contrib/emacs/*.el %{buildroot}%{_datadir}/emacs/site-lisp
+cat >%{buildroot}/etc/emacs/site-start.d/vc_git.el <<EOF
 (add-to-list 'vc-handled-backends 'GIT)
 EOF
 
 # install bash-completion file
-%__mkdir_p %{buildroot}%{_sysconfdir}/bash_completion.d
-%__install -m644 contrib/completion/git-completion.bash \
+mkdir -p %{buildroot}%{_sysconfdir}/bash_completion.d
+install -m644 contrib/completion/git-completion.bash \
     %{buildroot}%{_sysconfdir}/bash_completion.d/git
 
 # And the prompt manipulation file
-%__install -D -m 0644 %{SOURCE3} %{buildroot}%{_sysconfdir}/profile.d/%{profile_branch}
+install -D -m 0644 %{SOURCE3} %{buildroot}%{_sysconfdir}/profile.d/%{profile_branch}
 
 # exposes a bug in less, as reported by coling
 #install -D -m 0644 %SOURCE4 %{buildroot}%{_sysconfdir}/profile.d/%{profile_env}
@@ -358,3 +356,4 @@ LC_ALL=C %make %{git_make_params} test NO_SVN_TESTS=true
 
 %files -n git-prompt
 %{_sysconfdir}/profile.d/%{profile_branch}
+
