@@ -1,2 +1,4 @@
+removed_sources:
+  git-1.8.1.1.tar.gz: 44b90aab937b0e0dbb0661eb5ec4ca6182e60854
 sources:
-  "git-1.8.1.1.tar.gz": 44b90aab937b0e0dbb0661eb5ec4ca6182e60854
+  git-1.8.1.2.tar.gz: 29a2dee568b1f86e9d3d8f9dcc376f24439b6a0c
