@@ -4,7 +4,7 @@
 
 Name:		git
 Epoch:		1
-Version:	1.8.1.3
+Version:	1.8.2
 Release:	1
 Summary:	Global Information Tracker
 License:	GPLv2
@@ -202,7 +202,7 @@ mkdir -p %{buildroot}%{_bindir}
 make install-doc prefix=%{_prefix} gitexecdir=%{_libdir}/git-core   DESTDIR=%{buildroot}
 
 # Avoid dependencies on obscure perl modules
-chmod -x contrib/mw-to-git/git-remote-mediawiki
+chmod -x contrib/mw-to-git/git-remote-mediawiki.perl
 
 # (cg) Copy the whole contrib dir as docs. It contains useful scripts.
 mkdir -p %{buildroot}%{_datadir}/doc/git-core
@@ -299,6 +299,7 @@ LC_ALL=C %make %{git_make_params} test NO_SVN_TESTS=true
 %{_mandir}/*/gitworkflows*
 %{_mandir}/*/gitrevisions*
 %{_mandir}/*/gitcredentials*
+%{_mandir}/*/gitremote-helpers*
 %exclude %{_mandir}/man1/*svn*.1*
 %exclude %{_mandir}/man1/*cvs*.1*
 %exclude %{_mandir}/man7/*cvs*.7*
