@@ -2,11 +2,11 @@
 %define profile_branch	93git-branch.sh
 %define profile_env	93git-env.sh
 
+Summary:	Global Information Tracker
 Name:		git
 Epoch:		1
 Version:	1.8.2.1
 Release:	1
-Summary:	Global Information Tracker
 License:	GPLv2
 Group:		Development/Other
 Url:		http://git-scm.com/
@@ -20,9 +20,9 @@ BuildRequires:	asciidoc
 BuildRequires:	docbook-dtd45-xml
 BuildRequires:	perl-CGI
 BuildRequires:	xmlto
-BuildRequires:	expat-devel
 BuildRequires:	perl-devel
 BuildRequires:	perl(JSON::PP)
+BuildRequires:	pkgconfig(expat)
 BuildRequires:	pkgconfig(libcurl)
 BuildRequires:	pkgconfig(openssl)
 BuildRequires:	pkgconfig(python)
