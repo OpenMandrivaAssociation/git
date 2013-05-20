@@ -1,0 +1,15 @@
+diff --git a/Makefile b/Makefile
+index 598d631..30980bb 100644
+--- a/Makefile
++++ b/Makefile
+@@ -387,8 +387,8 @@ pathsep = :
+ 
+ export prefix bindir sharedir sysconfdir gitwebdir localedir
+ 
+-CC = cc
+-AR = ar
++CC = $(CC)
++AR = $(AR)
+ RM = rm -f
+ DIFF = diff
+ TAR = tar

@@ -15,6 +15,7 @@ Source2:	gitweb.conf
 Source3:	%{profile_branch}
 # Do we really need it? It's not used anyway
 Source4:	%{profile_env}
+Patch0:		git-1.8-do-not-use-hardcoded-defs.patch
 
 BuildRequires:	asciidoc
 BuildRequires:	docbook-dtd45-xml
@@ -183,11 +184,12 @@ Shows the current git branch in your bash prompt.
 rm -f Documentation/.gitignore
 # prefix gitweb css/png files with /gitweb
 perl -pi -e 's!^(GITWEB_CSS|GITWEB_LOGO|GITWEB_FAVICON) = !$1 = /gitweb/!' Makefile
+%apply_patches
 
 %build
 # same flags and prefix must be passed for make test too
-%define git_make_params prefix=%{_prefix} gitexecdir=%{_libdir}/git-core CFLAGS="%{optflags}" GITWEB_CONFIG=%{_sysconfdir}/gitweb.conf DOCBOOK_XSL_172=1
-%make %{git_make_params} all doc gitweb/gitweb.cgi
+%define git_make_params prefix=%{_prefix} CC=%{__cc} gitexecdir=%{_libdir}/git-core CFLAGS="%{optflags}" GITWEB_CONFIG=%{_sysconfdir}/gitweb.conf DOCBOOK_XSL_172=1
+%make CC=%{__cc} AR=%{__ar} %{git_make_params} all doc gitweb/gitweb.cgi
 
 # Produce RelNotes.txt.gz
 # sed trick changes "-x.y.z.txt" to "-x.y.z.0.txt" for ordering, then undoes it
@@ -198,8 +200,8 @@ cd Documentation/RelNotes \
 
 %install
 mkdir -p %{buildroot}%{_bindir}
-%makeinstall_std prefix=%{_prefix} gitexecdir=%{_libdir}/git-core  CFLAGS="%{optflags}"
-make install-doc prefix=%{_prefix} gitexecdir=%{_libdir}/git-core   DESTDIR=%{buildroot}
+%makeinstall_std CC=%{__cc} AR=%{__ar} prefix=%{_prefix} gitexecdir=%{_libdir}/git-core  CFLAGS="%{optflags}"
+make install-doc CC=%{__cc} AR=%{__ar} prefix=%{_prefix} gitexecdir=%{_libdir}/git-core   DESTDIR=%{buildroot}
 
 # Avoid dependencies on obscure perl modules
 chmod -x contrib/mw-to-git/git-remote-mediawiki.perl
