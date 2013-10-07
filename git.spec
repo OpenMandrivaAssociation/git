@@ -165,6 +165,7 @@ Git obsolete commands, bound to extinction
 Summary:	cgi-bin script for browse a git repository with web browser
 Group:		System/Servers
 Requires:	git-core = %{EVRD}
+Suggests:	apache-mod_socache_shmcb
 
 %description -n gitweb
 cgi-bin script for browse a git repository with web browser.
@@ -234,8 +235,7 @@ cat > %{buildroot}%{_webappconfdir}/gitweb.conf <<EOF
 Alias /gitweb %{_datadir}/gitweb
 
 <Directory %{_datadir}/gitweb>
-    Order allow,deny
-    Allow from all
+    Require all granted
     Options ExecCgi
     DirectoryIndex gitweb.cgi
 </Directory>
