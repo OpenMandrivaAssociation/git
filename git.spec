@@ -6,7 +6,7 @@ Summary:	Global Information Tracker
 Name:		git
 Epoch:		1
 Version:	1.8.3.2
-Release:	2
+Release:	3
 License:	GPLv2
 Group:		Development/Other
 Url:		http://git-scm.com/
@@ -238,6 +238,7 @@ Alias /gitweb %{_datadir}/gitweb
     Require all granted
     Options ExecCgi
     DirectoryIndex gitweb.cgi
+    AddHandler cgi-script .cgi
 </Directory>
 EOF
 
