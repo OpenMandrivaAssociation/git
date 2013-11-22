@@ -1,5 +1,6 @@
 removed_sources:
   git-1.8.3.1.tar.gz: 32562a231fe4422bc033bf872fffa61f41ee2669
   git-1.8.3.2.tar.gz: 4a6585dd81a542e7803e5f54a5c85b1c1a5869aa
-sources:
   git-1.8.4.2.tar.gz: f2e9317703553b4215700605c15d0f3a30623a9d
+sources:
+  git-1.8.4.4.tar.gz: 1aaa1a51b599f19125e06fa6e839c9ff2e5ac941
