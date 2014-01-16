@@ -16,6 +16,8 @@ Source3:	%{profile_branch}
 # Do we really need it? It's not used anyway
 Source4:	%{profile_env}
 Patch0:		git-1.8-do-not-use-hardcoded-defs.patch
+Source5:	git.service
+Source6:	git.socket
 
 BuildRequires:	asciidoc
 BuildRequires:	docbook-dtd45-xml
@@ -145,13 +147,10 @@ Requires:	git-core = %{EVRD}
 %description -n perl-Git
 Perl interface to Git
 
-%package -n python-git
-Summary:	Python interface to Git
-Group:		Development/Python
-Requires:	git-core = %{EVRD}
-
-%description -n python-git
-Python interface to Git
+#--------------
+# Remove remote-helper python libraries and scripts, these are not ready for
+# use yet
+#--------------
 
 %package -n git-core-oldies
 Summary:	Git obsolete commands, bound to extinction
@@ -178,6 +177,15 @@ Requires:	bash-completion
 
 %description -n git-prompt
 Shows the current git branch in your bash prompt.
+
+%package -n git-daemon
+Summary:	Git protocol daemon
+Group:		System/Servers
+Requires:	git-core = %{EVRD}
+Requires(preun,post,postun):	rpm-helper
+
+%description -n git-daemon
+The git daemon for supporting git:// access to git repositories
 
 %prep
 %setup -q
@@ -225,6 +233,10 @@ rm -f %{buildroot}/%{perl_vendorlib}/Error.pm
 mkdir -p %{buildroot}%{_datadir}/gitweb/static
 install -m 755 gitweb/gitweb.cgi %{buildroot}%{_datadir}/gitweb
 install -m 644 gitweb/static/*.css gitweb/static/*.png %{buildroot}%{_datadir}/gitweb/static/
+
+mkdir -p %{buildroot}%{_unitdir}
+install -m 644 %{SOURCE5} %{buildroot}%{_unitdir}
+install -m 644 %{SOURCE6} %{buildroot}%{_unitdir}
 
 mkdir -p %{buildroot}%{_sysconfdir}
 install -m644 %{SOURCE2} %{buildroot}%{_sysconfdir}/gitweb.conf
@@ -345,9 +357,6 @@ LC_ALL=C %make %{git_make_params} test NO_SVN_TESTS=true
 %{perl_vendorlib}/*
 %{_mandir}/man3/*
 
-%files -n python-git
-%{py_puresitedir}/*
-
 %files -n git-core-oldies
 
 %files -n gitweb
@@ -361,3 +370,6 @@ LC_ALL=C %make %{git_make_params} test NO_SVN_TESTS=true
 %files -n git-prompt
 %{_sysconfdir}/profile.d/%{profile_branch}
 
+%files -n git-daemon
+%{_unitdir}/git.service
+%{_unitdir}/git.socket
