@@ -6,7 +6,7 @@ Summary:	Global Information Tracker
 Name:		git
 Epoch:		1
 Version:	1.9.0
-Release:	1
+Release:	2
 License:	GPLv2
 Group:		Development/Other
 Url:		http://git-scm.com/
@@ -104,8 +104,7 @@ Development files for git.
 Summary:	Git tools for importing Subversion repositories
 Group:		Development/Other
 Requires:	git-core = %{EVRD}, subversion
-Requires:	perl-Git
-Requires:	perl-SVN
+Requires:	perl-Git-SVN
 
 %description -n git-svn
 Git tools for importing Subversion repositories.
@@ -146,6 +145,14 @@ Requires:	git-core = %{EVRD}
 
 %description -n perl-Git
 Perl interface to Git
+
+%package -n perl-Git-SVN
+Summary:	Perl interface to Git SVN
+Group:		Development/Perl
+Requires:	perl-Git = %{EVRD}
+
+%description -n perl-Git-SVN
+Perl interface to Git SVN
 
 #--------------
 # Remove remote-helper python libraries and scripts, these are not ready for
@@ -354,8 +361,17 @@ LC_ALL=C %make %{git_make_params} test NO_SVN_TESTS=true
 %{_mandir}/man1/*email*.1*
 
 %files -n perl-Git
-%{perl_vendorlib}/*
-%{_mandir}/man3/*
+%{perl_vendorlib}/Git.pm
+%dir %{perl_vendorlib}/Git
+%{perl_vendorlib}/Git/I18N.pm
+%{perl_vendorlib}/Git/IndexInfo.pm
+%{_mandir}/man3/Git.3pm*
+%{_mandir}/man3/Git::I18N.3pm*
+
+%files -n perl-Git-SVN
+%{perl_vendorlib}/Git/SVN
+%{perl_vendorlib}/Git/SVN.pm
+%{_mandir}/man3/Git::SVN*.3pm*
 
 %files -n git-core-oldies
 
