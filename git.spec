@@ -5,12 +5,12 @@
 Summary:	Global Information Tracker
 Name:		git
 Epoch:		1
-Version:	2.1.3
+Version:	2.2.0
 Release:	1
 License:	GPLv2
 Group:		Development/Other
 Url:		http://git-scm.com/
-Source0:	https://www.kernel.org/pub/software/scm/git/%{name}-%{version}.tar.gz
+Source0:	https://www.kernel.org/pub/software/scm/git/%{name}-%{version}.tar.xz
 Source2:	gitweb.conf
 Source3:	%{profile_branch}
 # Do we really need it? It's not used anyway
@@ -321,6 +321,7 @@ fi
 %{_mandir}/*/gitmodules*
 %{_mandir}/*/gitnamespaces*
 %{_mandir}/*/gitcli*
+%{_mandir}/*/giteveryday*
 %{_mandir}/*/githooks*
 %{_mandir}/*/gitrepository*
 %{_mandir}/*/*tutorial*
