@@ -1,3 +1,9 @@
+# FIXME
+# ld: /home/bero/abf/llvm/BUILD/llvm-3.7.0.src/lib/CodeGen/LexicalScopes.cpp:160: llvm::LexicalScope *llvm::LexicalScopes::getOrCreateRegularScope(const llvm::DILocalScope *): Assertion `cast<DISubprogram>(Scope)->describes(MF->getFunction())' failed.
+# clang-3.7: error: unable to execute command: Aborted (core dumped)
+# clang-3.7: error: linker command failed due to signal (use -v to see invocation)
+# with clang 3.7-242129, binutils 2.25.51
+%define _disable_lto	1
 %define libname		%mklibname git
 %define profile_branch	93git-branch.sh
 %define profile_env	93git-env.sh
@@ -5,7 +11,7 @@
 Summary:	Global Information Tracker
 Name:		git
 Epoch:		1
-Version:	2.4.4
+Version:	2.4.6
 Release:	1
 License:	GPLv2
 Group:		Development/Other
@@ -196,7 +202,7 @@ The git daemon for supporting git:// access to git repositories
 
 %prep
 %setup -q
-# remove borring file
+# remove boring file
 rm -f Documentation/.gitignore
 # prefix gitweb css/png files with /gitweb
 perl -pi -e 's!^(GITWEB_CSS|GITWEB_LOGO|GITWEB_FAVICON) = !$1 = /gitweb/!' Makefile
@@ -205,7 +211,7 @@ perl -pi -e 's!^(GITWEB_CSS|GITWEB_LOGO|GITWEB_FAVICON) = !$1 = /gitweb/!' Makef
 %build
 # same flags and prefix must be passed for make test too
 %define git_make_params prefix=%{_prefix} CC=%{__cc} gitexecdir=%{_libdir}/git-core CFLAGS="%{optflags}" GITWEB_CONFIG=%{_sysconfdir}/gitweb.conf DOCBOOK_XSL_172=1
-%make CC=%{__cc} AR=%{__ar} %{git_make_params} all doc gitweb/gitweb.cgi
+%make CC=%{__cc} AR=%{__ar} %{git_make_params} all doc
 
 # Produce RelNotes.txt.gz
 # sed trick changes "-x.y.z.txt" to "-x.y.z.0.txt" for ordering, then undoes it
