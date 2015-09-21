@@ -2,7 +2,7 @@
 # ld: /home/bero/abf/llvm/BUILD/llvm-3.7.0.src/lib/CodeGen/LexicalScopes.cpp:160: llvm::LexicalScope *llvm::LexicalScopes::getOrCreateRegularScope(const llvm::DILocalScope *): Assertion `cast<DISubprogram>(Scope)->describes(MF->getFunction())' failed.
 # clang-3.7: error: unable to execute command: Aborted (core dumped)
 # clang-3.7: error: linker command failed due to signal (use -v to see invocation)
-# with clang 3.7-242129, binutils 2.25.51
+# with clang 3.7.0, binutils 2.25.51
 %define _disable_lto	1
 %define libname		%mklibname git
 %define profile_branch	93git-branch.sh
@@ -11,7 +11,7 @@
 Summary:	Global Information Tracker
 Name:		git
 Epoch:		1
-Version:	2.5.0
+Version:	2.5.3
 Release:	1
 License:	GPLv2
 Group:		Development/Other
