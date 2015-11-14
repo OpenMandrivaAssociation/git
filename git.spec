@@ -5,12 +5,12 @@
 Summary:	Global Information Tracker
 Name:		git
 Epoch:		1
-Version:	1.9.0
-Release:	2
+Version:	1.9.5
+Release:	1
 License:	GPLv2
 Group:		Development/Other
 Url:		http://git-scm.com/
-Source0:	http://git-core.googlecode.com/files/%{name}-%{version}.tar.gz
+Source0:	https://www.kernel.org/pub/software/scm/git/%{name}-%{version}.tar.xz
 Source2:	gitweb.conf
 Source3:	%{profile_branch}
 # Do we really need it? It's not used anyway

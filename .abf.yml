@@ -1,2 +1,4 @@
-sources:
+removed_sources:
   git-1.9.0.tar.gz: e60667fc16e5a5f1cde46616b0458cc802707743
+sources:
+  git-1.9.5.tar.xz: d4fd2b005aac68f482084f213ed4ad0660bd2ae8
