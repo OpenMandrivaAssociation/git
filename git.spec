@@ -6,7 +6,7 @@ Summary:	Global Information Tracker
 Name:		git
 Epoch:		1
 Version:	2.7.1
-Release:	1
+Release:	2
 License:	GPLv2
 Group:		Development/Other
 Url:		http://git-scm.com/
@@ -30,14 +30,7 @@ BuildRequires:	pkgconfig(libcurl)
 BuildRequires:	pkgconfig(openssl)
 BuildRequires:	pkgconfig(python)
 BuildRequires:	pkgconfig(zlib)
-
 Requires:	git-core = %{EVRD}
-Requires:	gitk = %{EVRD}
-Requires:	git-svn = %{EVRD}
-Requires:	git-email = %{EVRD}
-Suggests:	git-arch = %{EVRD}
-Suggests:	git-core-oldies = %{EVRD}
-Suggests:	git-cvs = %{EVRD}
 
 %description
 This is a stupid (but extremely fast) directory content manager.  It
@@ -48,6 +41,27 @@ rudimentary tools that can be used as a SCM, but you should look
 elsewhere for tools for ordinary humans layered on top of this.
 
 This is a dummy package which brings in all subpackages.
+
+%package -n task-git
+Summary:	Full git suite
+Group:		Development/Other
+Requires:	git = %{EVRD}
+Requires:	git-core = %{EVRD}
+Requires:	gitk = %{EVRD}
+Requires:	git-svn = %{EVRD}
+Requires:	git-email = %{EVRD}
+Suggests:	git-arch = %{EVRD}
+Suggests:	git-core-oldies = %{EVRD}
+Suggests:	git-cvs = %{EVRD}
+Suggests:	gitview = %{EVRD}
+Suggests:	git-daemon = %{EVRD}
+Suggests:	git-prompt = %{EVRD}
+Suggests:	gitweb = %{EVRD}
+Suggests:	perl-Git = %{EVRD}
+Suggests:	perl-Git-SVN = %{EVRD}
+
+%description -n task-git
+Full git suite.
 
 %package -n git-core
 Summary:	Global Information Tracker
@@ -300,6 +314,9 @@ fi
 
 %files
 # no file in the main package
+
+%files -n task-git
+# no file in this package
 
 %files -n git-core -f %{name}.lang
 /etc/emacs/site-start.d/*
