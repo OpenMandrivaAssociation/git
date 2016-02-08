@@ -30,7 +30,14 @@ BuildRequires:	pkgconfig(libcurl)
 BuildRequires:	pkgconfig(openssl)
 BuildRequires:	pkgconfig(python)
 BuildRequires:	pkgconfig(zlib)
+
 Requires:	git-core = %{EVRD}
+Suggests:	gitk = %{EVRD}
+Requires:	git-svn = %{EVRD}
+Requires:	git-email = %{EVRD}
+Suggests:	git-arch = %{EVRD}
+Suggests:	git-core-oldies = %{EVRD}
+Suggests:	git-cvs = %{EVRD}
 
 %description
 This is a stupid (but extremely fast) directory content manager.  It
