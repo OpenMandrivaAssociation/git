@@ -5,8 +5,8 @@
 Summary:	Global Information Tracker
 Name:		git
 Epoch:		1
-Version:	2.7.1
-Release:	2
+Version:	2.7.2
+Release:	1
 License:	GPLv2
 Group:		Development/Other
 Url:		http://git-scm.com/
