@@ -5,7 +5,7 @@
 Summary:	Global Information Tracker
 Name:		git
 Epoch:		1
-Version:	2.7.2
+Version:	2.8.0
 Release:	1
 License:	GPLv2
 Group:		Development/Other
@@ -360,10 +360,9 @@ fi
 %exclude %{_mandir}/man7/*cvs*.7*
 %exclude %{_mandir}/man1/*email*.1*
 %exclude %{_mandir}/man1/git-archimport.1*
-%doc README Documentation/*.html Documentation/howto Documentation/technical Documentation/RelNotes.txt.gz
+%doc Documentation/*.html Documentation/howto Documentation/technical Documentation/RelNotes.txt.gz
 
 %files -n gitk
-%doc README
 %{_bindir}/gitk
 %{_mandir}/*/gitk*
 %{_datadir}/gitk
@@ -409,7 +408,7 @@ fi
 %files -n git-core-oldies
 
 %files -n gitweb
-%doc gitweb/INSTALL gitweb/README
+%doc gitweb/INSTALL
 %config(noreplace) %{_sysconfdir}/gitweb.conf
 %config(noreplace) %{_webappconfdir}/gitweb.conf
 %{_datadir}/gitweb
