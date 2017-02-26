@@ -5,7 +5,7 @@
 Summary:	Global Information Tracker
 Name:		git
 Epoch:		1
-Version:	2.11.0
+Version:	2.12.0
 Release:	1
 License:	GPLv2
 Group:		Development/Other
@@ -60,7 +60,6 @@ Requires:	git-email = %{EVRD}
 Suggests:	git-arch = %{EVRD}
 Suggests:	git-core-oldies = %{EVRD}
 Suggests:	git-cvs = %{EVRD}
-Suggests:	gitview = %{EVRD}
 Suggests:	git-daemon = %{EVRD}
 Suggests:	git-prompt = %{EVRD}
 Suggests:	gitweb = %{EVRD}
@@ -78,6 +77,8 @@ Requires:	rsync
 Requires:	less
 Requires:	openssh-clients
 Suggests:	git-prompt
+# Abandoned and dropped in 2.12
+Obsoletes:	gitview < %{EVRD}
 
 %description -n git-core
 This is a stupid (but extremely fast) directory content manager.  It
@@ -101,17 +102,6 @@ Requires:	tcl >= 8.4
 
 %description -n gitk
 Git revision tree visualiser.
-
-%package -n gitview
-Summary:	Git graphical revision tree visualiser
-Group:		Development/Other
-Requires:	git-core = %{EVRD}
-Requires:	python-cairo
-Requires:	pygtk2.0
-Requires:	python-gtksourceview
-
-%description -n gitview
-Git graphical revision tree visualiser.
 
 %package -n %{libname}-devel
 Summary:	Git development files
@@ -246,8 +236,6 @@ chmod -x contrib/mw-to-git/git-remote-mediawiki.perl
 # (cg) Copy the whole contrib dir as docs. It contains useful scripts.
 mkdir -p %{buildroot}%{_datadir}/doc/git-core
 cp -ar contrib %{buildroot}%{_datadir}/doc/git-core
-# (cg) Even tho' we copy the whole contrib dir, copy this rather than symlink incase the user is excluding docs
-install -m 755 contrib/gitview/gitview %{buildroot}%{_bindir}
 
 mkdir -p %{buildroot}%{_includedir}/git
 cp *.h %{buildroot}%{_includedir}/git
@@ -366,10 +354,6 @@ fi
 %{_bindir}/gitk
 %{_mandir}/*/gitk*
 %{_datadir}/gitk
-
-%files -n gitview
-%doc contrib/gitview/gitview.txt
-%{_bindir}/gitview
 
 %files -n %{libname}-devel
 %{_includedir}/git
