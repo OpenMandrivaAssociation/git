@@ -5,7 +5,7 @@
 Summary:	Global Information Tracker
 Name:		git
 Epoch:		1
-Version:	2.13.3
+Version:	2.14.0
 Release:	1
 License:	GPLv2
 Group:		Development/Other
@@ -343,6 +343,7 @@ fi
 %{_mandir}/*/gitrevisions*
 %{_mandir}/*/gitcredentials*
 %{_mandir}/*/gitremote-helpers*
+%{_mandir}/man7/*submodule*
 %exclude %{_mandir}/man1/*svn*.1*
 %exclude %{_mandir}/man1/*cvs*.1*
 %exclude %{_mandir}/man7/*cvs*.7*
