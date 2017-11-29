@@ -5,7 +5,7 @@
 Summary:	Global Information Tracker
 Name:		git
 Epoch:		1
-Version:	2.15.0
+Version:	2.15.1
 Release:	1
 License:	GPLv2
 Group:		Development/Other
