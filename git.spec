@@ -6,7 +6,7 @@ Summary:	Global Information Tracker
 Name:		git
 Epoch:		1
 Version:	2.15.1
-Release:	1
+Release:	2
 License:	GPLv2
 Group:		Development/Other
 Url:		http://git-scm.com/
@@ -33,7 +33,7 @@ BuildRequires:	pkgconfig(zlib)
 
 Requires:	git-core = %{EVRD}
 Suggests:	gitk = %{EVRD}
-Requires:	git-svn = %{EVRD}
+Suggests:	git-svn = %{EVRD}
 Requires:	git-email = %{EVRD}
 Suggests:	git-arch = %{EVRD}
 Suggests:	git-core-oldies = %{EVRD}
@@ -55,7 +55,7 @@ Group:		Development/Other
 Requires:	git = %{EVRD}
 Requires:	git-core = %{EVRD}
 Requires:	gitk = %{EVRD}
-Requires:	git-svn = %{EVRD}
+Suggests:	git-svn = %{EVRD}
 Requires:	git-email = %{EVRD}
 Suggests:	git-arch = %{EVRD}
 Suggests:	git-core-oldies = %{EVRD}
@@ -114,7 +114,8 @@ Development files for git.
 %package -n git-svn
 Summary:	Git tools for importing Subversion repositories
 Group:		Development/Other
-Requires:	git-core = %{EVRD}, subversion
+Requires:	git-core = %{EVRD}
+Requires:	subversion
 Requires:	perl-Git-SVN
 
 %description -n git-svn
