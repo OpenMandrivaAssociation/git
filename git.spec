@@ -5,8 +5,8 @@
 Summary:	Global Information Tracker
 Name:		git
 Epoch:		1
-Version:	2.15.1
-Release:	2
+Version:	2.16.0
+Release:	1
 License:	GPLv2
 Group:		Development/Other
 Url:		http://git-scm.com/
@@ -383,6 +383,7 @@ fi
 %dir %{perl_vendorlib}/Git
 %{perl_vendorlib}/Git/I18N.pm
 %{perl_vendorlib}/Git/IndexInfo.pm
+%{perl_vendorlib}/Git/Packet.pm
 %{_mandir}/man3/Git.3pm*
 %{_mandir}/man3/Git::I18N.3pm*
 
