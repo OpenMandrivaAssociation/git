@@ -5,7 +5,7 @@
 Summary:	Global Information Tracker
 Name:		git
 Epoch:		1
-Version:	2.16.2
+Version:	2.16.3
 Release:	1
 License:	GPLv2
 Group:		Development/Other
@@ -36,7 +36,6 @@ Suggests:	gitk = %{EVRD}
 Suggests:	git-svn = %{EVRD}
 Requires:	git-email = %{EVRD}
 Suggests:	git-arch = %{EVRD}
-Suggests:	git-core-oldies = %{EVRD}
 Suggests:	git-cvs = %{EVRD}
 
 %description
@@ -69,7 +68,7 @@ Suggests:	perl-Git-SVN = %{EVRD}
 %description -n task-git
 Full git suite.
 
-%package -n git-core
+%package core
 Summary:	Global Information Tracker
 Group:		Development/Other
 Requires:	diffutils
@@ -79,8 +78,9 @@ Requires:	openssh-clients
 Suggests:	git-prompt
 # Abandoned and dropped in 2.12
 Obsoletes:	gitview < %{EVRD}
+Obsoletes:	git-core-oldies < %{EVRD}
 
-%description -n git-core
+%description core
 This is a stupid (but extremely fast) directory content manager.  It
 doesn't do a whole lot, but what it _does_ do is track directory
 contents efficiently. It is intended to be the base of an efficient,
@@ -92,6 +92,14 @@ This are the core tools with minimal dependencies.
 
 You may want to install subversion, cpsps and/or tla to import
 repositories from other VCS.
+
+%package extras
+Summary:	Additional tools and scripts for working with git
+Group:		Development/Other
+Requires:	git-core = %{EVRD}
+
+%description extras
+Additional tools and scripts for working with git
 
 %package -n gitk
 Summary:	Git revision tree visualiser
@@ -111,43 +119,43 @@ Provides:	git-devel = %{version}-%{release}
 %description -n %{libname}-devel
 Development files for git.
 
-%package -n git-svn
+%package svn
 Summary:	Git tools for importing Subversion repositories
 Group:		Development/Other
 Requires:	git-core = %{EVRD}
 Requires:	subversion
 Requires:	perl-Git-SVN
 
-%description -n git-svn
+%description svn
 Git tools for importing Subversion repositories.
 
-%package -n git-cvs
+%package cvs
 Summary:	Git tools for importing CVS repositories
 Group:		Development/Other
 Requires:	git-core = %{EVRD}
 Suggests:	cvs
 Suggests:	cvsps
 
-%description -n git-cvs
+%description cvs
 Git tools for importing CVS repositories.
 
-%package -n git-arch
+%package arch
 Summary:	Git tools for importing Arch repositories
 Group:		Development/Other
 Requires:	git-core = %{EVRD}
 Suggests:	tla
 
-%description -n git-arch
+%description arch
 Git tools for importing Arch repositories.
 
-%package -n git-email
+%package email
 Summary:	Git tools for sending email
 Group:		Development/Other
 Requires:	git-core = %{EVRD}
 Suggests:	perl-Authen-SASL
 Suggests:	perl-MIME-Base64
 
-%description -n git-email
+%description email
 Git tools for sending email.
 
 %package -n perl-Git
@@ -171,14 +179,6 @@ Perl interface to Git SVN
 # use yet
 #--------------
 
-%package -n git-core-oldies
-Summary:	Git obsolete commands, bound to extinction
-Group:		Development/Other
-Requires:	git-core = %{EVRD}
-
-%description -n git-core-oldies
-Git obsolete commands, bound to extinction
-
 %package -n gitweb
 Summary:	cgi-bin script for browse a git repository with web browser
 Group:		System/Servers
@@ -188,22 +188,23 @@ Suggests:	apache-mod_socache_shmcb
 %description -n gitweb
 cgi-bin script for browse a git repository with web browser.
 
-%package -n git-prompt
+%package prompt
 Summary:	Shows the current git branch in your bash prompt
 Group:		Shells
 Requires:	git-core = %{EVRD}
 Requires:	bash-completion
 
-%description -n git-prompt
+%description prompt
 Shows the current git branch in your bash prompt.
 
-%package -n git-daemon
-Summary:	Git protocol daemon
+%package server
+Summary:	git:// protocol server
 Group:		System/Servers
 Requires:	git-core = %{EVRD}
 Requires(preun,post,postun):	rpm-helper
+%rename git-daemon
 
-%description -n git-daemon
+%description server
 The git daemon for supporting git:// access to git repositories
 
 %prep
@@ -216,7 +217,7 @@ perl -pi -e 's!^(GITWEB_CSS|GITWEB_LOGO|GITWEB_FAVICON) = !$1 = /gitweb/!' Makef
 
 %build
 # same flags and prefix must be passed for make test too
-%define git_make_params prefix=%{_prefix} CC=%{__cc} gitexecdir=%{_libdir}/git-core CFLAGS="%{optflags}" GITWEB_CONFIG=%{_sysconfdir}/gitweb.conf DOCBOOK_XSL_172=1
+%define git_make_params prefix=%{_prefix} CC=%{__cc} gitexecdir=%{_libdir}/git-core CFLAGS="%{optflags}" GITWEB_CONFIG=%{_sysconfdir}/gitweb.conf DOCBOOK_XSL_172=1 INSTALLDIRS=vendor
 %make CC=%{__cc} AR=%{__ar} %{git_make_params} all doc
 
 # Produce RelNotes.txt.gz
@@ -228,15 +229,16 @@ cd Documentation/RelNotes \
 
 %install
 mkdir -p %{buildroot}%{_bindir}
-%makeinstall_std CC=%{__cc} AR=%{__ar} prefix=%{_prefix} gitexecdir=%{_libdir}/git-core  CFLAGS="%{optflags}"
+%make_install CC=%{__cc} AR=%{__ar} prefix=%{_prefix} gitexecdir=%{_libdir}/git-core  CFLAGS="%{optflags}" INSTALLDIRS=vendor
 make install-doc CC=%{__cc} AR=%{__ar} prefix=%{_prefix} gitexecdir=%{_libdir}/git-core   DESTDIR=%{buildroot}
 
+# Contrib contains some useful stuff -- let's package it in git-extras
+mv contrib/git-resurrect.sh %{buildroot}%{_bindir}/git-resurrect
+mv contrib/git-jump/git-jump %{buildroot}%{_bindir}/
+mkdir -p %{buildroot}%{_docdir}/git-extras
 # Avoid dependencies on obscure perl modules
 chmod -x contrib/mw-to-git/git-remote-mediawiki.perl
-
-# (cg) Copy the whole contrib dir as docs. It contains useful scripts.
-mkdir -p %{buildroot}%{_datadir}/doc/git-core
-cp -ar contrib %{buildroot}%{_datadir}/doc/git-core
+cp -ar contrib %{buildroot}%{_docdir}/git-extras
 
 mkdir -p %{buildroot}%{_includedir}/git
 cp *.h %{buildroot}%{_includedir}/git
@@ -244,7 +246,7 @@ cp *.h %{buildroot}%{_includedir}/git
 mkdir -p %{buildroot}%{_libdir}
 install -m 644 libgit.a %{buildroot}%{_libdir}/libgit.a
 
-mv %{buildroot}/%{_prefix}/lib/perl5/site_perl %{buildroot}/%{_prefix}/lib/perl5/vendor_perl
+[ -d %{buildroot}%{_prefix}/lib/perl5/site_perl ] && mv %{buildroot}/%{_prefix}/lib/perl5/site_perl %{buildroot}/%{_prefix}/lib/perl5/vendor_perl
 rm -f %{buildroot}/%{perl_vendorlib}/Error.pm
 
 mkdir -p %{buildroot}%{_datadir}/gitweb/static
@@ -314,19 +316,24 @@ fi
 %files -n task-git
 # no file in this package
 
-%files -n git-core -f %{name}.lang
+%files core -f %{name}.lang
 /etc/emacs/site-start.d/*
 /etc/bash_completion.d/*
 %{_datadir}/emacs/site-lisp/*
 %{_bindir}/git
-%{_bindir}/git-*
+%{_bindir}/git-new-workdir
+%{_bindir}/git-receive-pack
+%{_bindir}/git-upload-archive
+%{_bindir}/git-upload-pack
 %{_libdir}/git-core
 %exclude %{_libdir}/git-core/*svn*
 %exclude %{_libdir}/git-core/*cvs*
 %exclude %{_libdir}/git-core/git-archimport
 %exclude %{_libdir}/git-core/*email*
+%exclude %{_libdir}/git-core/git-citool
+%exclude %{_libdir}/git-core/git-gui
+%exclude %{_libdir}/git-core/git-instaweb
 %{_datadir}/git-core
-%{_datadir}/git-gui
 %{_mandir}/*/git-*
 %{_mandir}/*/git.*
 %{_mandir}/*/gitattributes*
@@ -351,30 +358,35 @@ fi
 %exclude %{_mandir}/man1/*email*.1*
 %exclude %{_mandir}/man1/git-archimport.1*
 %doc Documentation/*.html Documentation/howto Documentation/technical Documentation/RelNotes.txt.gz
+%exclude %{_docdir}/git-core/gitweb.html
 
 %files -n gitk
 %{_bindir}/gitk
+%{_libdir}/git-core/git-citool
+%{_libdir}/git-core/git-gui
 %{_mandir}/*/gitk*
 %{_datadir}/gitk
+%{_datadir}/git-gui
 
 %files -n %{libname}-devel
 %{_includedir}/git
 %{_libdir}/libgit.a
 
-%files -n git-svn
+%files svn
 %{_libdir}/git-core/*svn*
 %{_mandir}/man1/*svn*.1*
 
-%files -n git-cvs
+%files cvs
+%{_bindir}/git-cvsserver
 %{_libdir}/git-core/*cvs*
 %{_mandir}/man1/*cvs*.1*
 %{_mandir}/man7/*cvs*.7*
 
-%files -n git-arch
+%files arch
 %{_libdir}/git-core/git-archimport
 %{_mandir}/man1/git-archimport.1*
 
-%files -n git-email
+%files email
 %{_libdir}/git-core/*email*
 %{_mandir}/man1/*email*.1*
 
@@ -392,19 +404,25 @@ fi
 %{perl_vendorlib}/Git/SVN.pm
 %{_mandir}/man3/Git::SVN*.3pm*
 
-%files -n git-core-oldies
-
 %files -n gitweb
 %doc gitweb/INSTALL
 %config(noreplace) %{_sysconfdir}/gitweb.conf
 %config(noreplace) %{_webappconfdir}/gitweb.conf
+%{_libdir}/git-core/git-instaweb
 %{_datadir}/gitweb
 %{_mandir}/man1/gitweb.1*
 %{_mandir}/man5/gitweb.conf.5*
+%doc %{_docdir}/git-core/gitweb.html
 
-%files -n git-prompt
+%files prompt
 %{_sysconfdir}/profile.d/%{profile_branch}
 
-%files -n git-daemon
+%files server
+%{_bindir}/git-shell
 %{_unitdir}/git.service
 %{_unitdir}/git.socket
+
+%files extras
+%{_bindir}/git-resurrect
+%{_bindir}/git-jump
+%{_docdir}/git-extras
