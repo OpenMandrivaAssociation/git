@@ -237,7 +237,7 @@ mv contrib/git-resurrect.sh %{buildroot}%{_bindir}/git-resurrect
 mv contrib/git-jump/git-jump %{buildroot}%{_bindir}/
 mkdir -p %{buildroot}%{_docdir}/git-extras
 # Avoid dependencies on obscure perl modules
-chmod -x contrib/mw-to-git/git-remote-mediawiki.perl
+find contrib -name "*.pl" -o -name "*.perl" |xargs chmod -x
 cp -ar contrib %{buildroot}%{_docdir}/git-extras
 
 mkdir -p %{buildroot}%{_includedir}/git
