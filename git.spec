@@ -38,7 +38,7 @@ BuildRequires:	pkgconfig(zlib)
 Requires:	git-core = %{EVRD}
 Suggests:	gitk = %{EVRD}
 Suggests:	git-svn = %{EVRD}
-Requires:	git-email = %{EVRD}
+Suggests:	git-email = %{EVRD}
 Suggests:	git-arch = %{EVRD}
 Suggests:	git-cvs = %{EVRD}
 
