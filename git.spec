@@ -9,8 +9,8 @@
 Summary:	Global Information Tracker
 Name:		git
 Epoch:		1
-Version:	2.16.3
-Release:	4
+Version:	2.17.0
+Release:	1
 License:	GPLv2
 Group:		Development/Other
 Url:		http://git-scm.com/
@@ -222,7 +222,7 @@ perl -pi -e 's!^(GITWEB_CSS|GITWEB_LOGO|GITWEB_FAVICON) = !$1 = /gitweb/!' Makef
 
 %build
 # same flags and prefix must be passed for make test too
-%define git_make_params prefix=%{_prefix} CC=%{__cc} gitexecdir=%{_libdir}/git-core CFLAGS="%{optflags}" GITWEB_CONFIG=%{_sysconfdir}/gitweb.conf DOCBOOK_XSL_172=1 INSTALLDIRS=vendor
+%define git_make_params prefix=%{_prefix} CC=%{__cc} gitexecdir=%{_libdir}/git-core CFLAGS="%{optflags}" GITWEB_CONFIG=%{_sysconfdir}/gitweb.conf DOCBOOK_XSL_172=1 INSTALLDIRS=vendor perllibdir=%{perl_vendorlib}
 %make CC=%{__cc} AR=%{__ar} %{git_make_params} all doc
 
 # Produce RelNotes.txt.gz
@@ -234,7 +234,7 @@ cd Documentation/RelNotes \
 
 %install
 mkdir -p %{buildroot}%{_bindir}
-%make_install CC=%{__cc} AR=%{__ar} prefix=%{_prefix} gitexecdir=%{_libdir}/git-core  CFLAGS="%{optflags}" INSTALLDIRS=vendor
+%make_install CC=%{__cc} AR=%{__ar} prefix=%{_prefix} gitexecdir=%{_libdir}/git-core  CFLAGS="%{optflags}" INSTALLDIRS=vendor perllibdir=%{perl_vendorlib}
 make install-doc CC=%{__cc} AR=%{__ar} prefix=%{_prefix} gitexecdir=%{_libdir}/git-core   DESTDIR=%{buildroot}
 
 # Contrib contains some useful stuff -- let's package it in git-extras
@@ -387,13 +387,14 @@ fi
 %{perl_vendorlib}/Git/I18N.pm
 %{perl_vendorlib}/Git/IndexInfo.pm
 %{perl_vendorlib}/Git/Packet.pm
+%{perl_vendorlib}/FromCPAN
+%{perl_vendorlib}/Git/LoadCPAN.pm
+%{perl_vendorlib}/Git/LoadCPAN
 %{_mandir}/man3/Git.3pm*
-%{_mandir}/man3/Git::I18N.3pm*
 
 %files -n perl-Git-SVN
 %{perl_vendorlib}/Git/SVN
 %{perl_vendorlib}/Git/SVN.pm
-%{_mandir}/man3/Git::SVN*.3pm*
 
 %files -n gitweb
 %doc gitweb/INSTALL
@@ -422,6 +423,7 @@ fi
 %{_datadir}/git-core/templates/hooks/fsmonitor-watchman.sample
 %{_datadir}/git-core/templates/hooks/pre-rebase.sample
 %{_datadir}/git-core/templates/hooks/prepare-commit-msg.sample
+%{_docdir}/git-extras
 %{_mandir}/*/git-*
 %{_mandir}/*/git.*
 %{_mandir}/*/gitattributes*
