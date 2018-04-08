@@ -414,6 +414,7 @@ fi
 
 %files extras
 %doc Documentation/*.html Documentation/howto Documentation/technical Documentation/RelNotes.txt.gz
+%doc %{_docdir}/git-extras
 %{_bindir}/git-resurrect
 %{_bindir}/git-jump
 %{_libdir}/git-core/git-add--interactive
