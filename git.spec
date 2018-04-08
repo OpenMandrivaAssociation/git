@@ -424,7 +424,6 @@ fi
 %{_datadir}/git-core/templates/hooks/fsmonitor-watchman.sample
 %{_datadir}/git-core/templates/hooks/pre-rebase.sample
 %{_datadir}/git-core/templates/hooks/prepare-commit-msg.sample
-%{_docdir}/git-extras
 %{_mandir}/*/git-*
 %{_mandir}/*/git.*
 %{_mandir}/*/gitattributes*
