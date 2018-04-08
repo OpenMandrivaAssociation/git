@@ -350,7 +350,6 @@ fi
 %exclude %{_mandir}/man7/*cvs*.7*
 %exclude %{_mandir}/man1/*email*.1*
 %exclude %{_mandir}/man1/git-archimport.1*
-%exclude %{_docdir}/git-core/gitweb.html
 
 %files -n gitk
 %{_bindir}/gitk
@@ -404,7 +403,6 @@ fi
 %{_datadir}/gitweb
 %{_mandir}/man1/gitweb.1*
 %{_mandir}/man5/gitweb.conf.5*
-%doc %{_docdir}/git-core/gitweb.html
 
 %files prompt
 %{_sysconfdir}/profile.d/%{profile_branch}
@@ -418,7 +416,6 @@ fi
 %doc Documentation/*.html Documentation/howto Documentation/technical Documentation/RelNotes.txt.gz
 %{_bindir}/git-resurrect
 %{_bindir}/git-jump
-%{_docdir}/git-extras
 %{_libdir}/git-core/git-add--interactive
 %{_libdir}/git-core/git-filter-branch
 %{_libdir}/git-core/git-request-pull
