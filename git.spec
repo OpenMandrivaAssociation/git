@@ -10,7 +10,7 @@ Summary:	Global Information Tracker
 Name:		git
 Epoch:		1
 Version:	2.16.3
-Release:	2
+Release:	4
 License:	GPLv2
 Group:		Development/Other
 Url:		http://git-scm.com/
@@ -98,12 +98,13 @@ You may want to install subversion, cpsps and/or tla to import
 repositories from other VCS.
 
 %package extras
-Summary:	Additional tools and scripts for working with git
+Summary:	Additional tools, scripts documentation for working with git
 Group:		Development/Other
 Requires:	git-core = %{EVRD}
+Conflicts:	git-core < 1:2.16.3-4
 
 %description extras
-Additional tools and scripts for working with git
+Additional tools,scripts and documentation for working with git
 
 %package -n gitk
 Summary:	Git revision tree visualiser
@@ -168,7 +169,7 @@ Group:		Development/Perl
 Requires:	git-core = %{EVRD}
 
 %description -n perl-Git
-Perl interface to Git
+Perl interface to Git.
 
 %package -n perl-Git-SVN
 Summary:	Perl interface to Git SVN
@@ -176,7 +177,7 @@ Group:		Development/Perl
 Requires:	perl-Git = %{EVRD}
 
 %description -n perl-Git-SVN
-Perl interface to Git SVN
+Perl interface to Git SVN.
 
 #--------------
 # Remove remote-helper python libraries and scripts, these are not ready for
@@ -209,7 +210,7 @@ Requires(preun,post,postun):	rpm-helper
 %rename git-daemon
 
 %description server
-The git daemon for supporting git:// access to git repositories
+The git daemon for supporting git:// access to git repositories.
 
 %prep
 %setup -q
@@ -311,7 +312,7 @@ mv contrib/workdir/git-new-workdir %{buildroot}%{_bindir}/
 # replies from svn versions older than the one
 # we're shipping -- and they have changed since
 if ! LC_ALL=C %make %{git_make_params} test NO_SVN_TESTS=true; then
-	echo "WARNING: Some tests failed. You may want to investigate."
+    printf '%s\n' "WARNING: Some tests failed. You may want to investigate."
 fi
 
 %files
@@ -337,31 +338,18 @@ fi
 %exclude %{_libdir}/git-core/git-citool
 %exclude %{_libdir}/git-core/git-gui
 %exclude %{_libdir}/git-core/git-instaweb
+%exclude %{_libdir}/git-core/git-add--interactive
+%exclude %{_libdir}/git-core/git-filter-branch
+%exclude %{_libdir}/git-core/git-request-pull
 %{_datadir}/git-core
-%{_mandir}/*/git-*
-%{_mandir}/*/git.*
-%{_mandir}/*/gitattributes*
-%{_mandir}/*/gitignore*
-%{_mandir}/*/gitmodules*
-%{_mandir}/*/gitnamespaces*
-%{_mandir}/*/gitcli*
-%{_mandir}/*/giteveryday*
-%{_mandir}/*/githooks*
-%{_mandir}/*/gitrepository*
-%{_mandir}/*/*tutorial*
-%{_mandir}/*/*glossary*
-%{_mandir}/*/gitdiffcore*
-%{_mandir}/*/gitworkflows*
-%{_mandir}/*/gitrevisions*
-%{_mandir}/*/gitcredentials*
-%{_mandir}/*/gitremote-helpers*
-%{_mandir}/man7/*submodule*
+%exclude %{_datadir}/git-core/templates/hooks/fsmonitor-watchman.sample
+%exclude %{_datadir}/git-core/templates/hooks/pre-rebase.sample
+%exclude %{_datadir}/git-core/templates/hooks/prepare-commit-msg.sample
 %exclude %{_mandir}/man1/*svn*.1*
 %exclude %{_mandir}/man1/*cvs*.1*
 %exclude %{_mandir}/man7/*cvs*.7*
 %exclude %{_mandir}/man1/*email*.1*
 %exclude %{_mandir}/man1/git-archimport.1*
-%doc Documentation/*.html Documentation/howto Documentation/technical Documentation/RelNotes.txt.gz
 %exclude %{_docdir}/git-core/gitweb.html
 
 %files -n gitk
@@ -427,6 +415,31 @@ fi
 %{_unitdir}/git.socket
 
 %files extras
+%doc Documentation/*.html Documentation/howto Documentation/technical Documentation/RelNotes.txt.gz
 %{_bindir}/git-resurrect
 %{_bindir}/git-jump
 %{_docdir}/git-extras
+%{_libdir}/git-core/git-add--interactive
+%{_libdir}/git-core/git-filter-branch
+%{_libdir}/git-core/git-request-pull
+%{_datadir}/git-core/templates/hooks/fsmonitor-watchman.sample
+%{_datadir}/git-core/templates/hooks/pre-rebase.sample
+%{_datadir}/git-core/templates/hooks/prepare-commit-msg.sample
+%{_mandir}/*/git-*
+%{_mandir}/*/git.*
+%{_mandir}/*/gitattributes*
+%{_mandir}/*/gitignore*
+%{_mandir}/*/gitmodules*
+%{_mandir}/*/gitnamespaces*
+%{_mandir}/*/gitcli*
+%{_mandir}/*/giteveryday*
+%{_mandir}/*/githooks*
+%{_mandir}/*/gitrepository*
+%{_mandir}/*/*tutorial*
+%{_mandir}/*/*glossary*
+%{_mandir}/*/gitdiffcore*
+%{_mandir}/*/gitworkflows*
+%{_mandir}/*/gitrevisions*
+%{_mandir}/*/gitcredentials*
+%{_mandir}/*/gitremote-helpers*
+%{_mandir}/man7/*submodule*
