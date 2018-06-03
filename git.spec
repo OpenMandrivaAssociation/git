@@ -9,7 +9,7 @@
 Summary:	Global Information Tracker
 Name:		git
 Epoch:		1
-Version:	2.17.0
+Version:	2.17.1
 Release:	1
 License:	GPLv2
 Group:		Development/Other
