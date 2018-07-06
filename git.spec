@@ -27,6 +27,7 @@ BuildRequires:	asciidoc
 BuildRequires:	docbook-dtd45-xml
 BuildRequires:	perl-CGI
 BuildRequires:	xmlto
+BuildRequires:	systemd
 BuildRequires:	perl-devel
 BuildRequires:	perl(JSON::PP)
 BuildRequires:	pkgconfig(expat)
