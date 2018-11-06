@@ -416,7 +416,11 @@ fi
 
 %files extras
 %doc Documentation/*.html Documentation/howto Documentation/technical Documentation/RelNotes.txt.gz
-%doc %{_docdir}/git-extras
+%exclude %{_mandir}/man1/*svn*.1*
+%exclude %{_mandir}/man1/*cvs*.1*
+%exclude %{_mandir}/man7/*cvs*.7*
+%exclude %{_mandir}/man1/*email*.1*
+%exclude %{_mandir}/man1/git-archimport.1*
 %{_bindir}/git-resurrect
 %{_bindir}/git-jump
 %{_libdir}/git-core/git-add--interactive
