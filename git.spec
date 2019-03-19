@@ -5,6 +5,7 @@
 %define libname %mklibname git
 %define profile_branch 93git-branch.sh
 %define profile_env 93git-env.sh
+%bcond_with	docs
 
 Summary:	Global Information Tracker
 Name:		git
@@ -23,9 +24,11 @@ Source5:	git.service
 Source6:	git.socket
 
 BuildRequires:	asciidoc
-BuildRequires:	docbook-dtd45-xml
 BuildRequires:	perl-CGI
+%if %{with docs}
 BuildRequires:	xmlto
+BuildRequires:	docbook-dtd45-xml
+%endif
 BuildRequires:	systemd
 BuildRequires:	perl-devel
 BuildRequires:	perl(JSON::PP)
@@ -222,8 +225,8 @@ perl -pi -e 's!^(GITWEB_CSS|GITWEB_LOGO|GITWEB_FAVICON) = !$1 = /gitweb/!' Makef
 
 %build
 # same flags and prefix must be passed for make test too
-%define git_make_params prefix=%{_prefix} CC=%{__cc} gitexecdir=%{_libdir}/git-core CFLAGS="%{optflags}" GITWEB_CONFIG=%{_sysconfdir}/gitweb.conf DOCBOOK_XSL_172=1 INSTALLDIRS=vendor perllibdir=%{perl_vendorlib}
-%make CC=%{__cc} AR=%{__ar} %{git_make_params} all doc
+%define git_make_params prefix=%{_prefix} CC=%{__cc} gitexecdir=%{_libdir}/git-core CFLAGS="%{optflags}" GITWEB_CONFIG=%{_sysconfdir}/gitweb.conf DOCBOOK_XSL_172=0 INSTALLDIRS=vendor perllibdir=%{perl_vendorlib}
+%make CC=%{__cc} AR=%{__ar} %{git_make_params} all
 
 # Produce RelNotes.txt.gz
 # sed trick changes "-x.y.z.txt" to "-x.y.z.0.txt" for ordering, then undoes it
@@ -235,7 +238,7 @@ cd Documentation/RelNotes \
 %install
 mkdir -p %{buildroot}%{_bindir}
 %make_install CC=%{__cc} AR=%{__ar} prefix=%{_prefix} gitexecdir=%{_libdir}/git-core  CFLAGS="%{optflags}" INSTALLDIRS=vendor perllibdir=%{perl_vendorlib}
-make install-doc CC=%{__cc} AR=%{__ar} prefix=%{_prefix} gitexecdir=%{_libdir}/git-core   DESTDIR=%{buildroot}
+make CC=%{__cc} AR=%{__ar} prefix=%{_prefix} gitexecdir=%{_libdir}/git-core   DESTDIR=%{buildroot}
 
 # Contrib contains some useful stuff -- let's package it in git-extras
 mv contrib/git-resurrect.sh %{buildroot}%{_bindir}/git-resurrect
@@ -345,17 +348,21 @@ fi
 %exclude %{_datadir}/git-core/templates/hooks/fsmonitor-watchman.sample
 %exclude %{_datadir}/git-core/templates/hooks/pre-rebase.sample
 %exclude %{_datadir}/git-core/templates/hooks/prepare-commit-msg.sample
+%if %{with docs}
 %exclude %{_mandir}/man1/*svn*.1*
 %exclude %{_mandir}/man1/*cvs*.1*
 %exclude %{_mandir}/man7/*cvs*.7*
 %exclude %{_mandir}/man1/*email*.1*
 %exclude %{_mandir}/man1/git-archimport.1*
+%endif
 
 %files -n gitk
 %{_bindir}/gitk
 %{_libdir}/git-core/git-citool
 %{_libdir}/git-core/git-gui
+%if %{with docs}
 %{_mandir}/*/gitk*
+%endif
 %{_datadir}/gitk
 %{_datadir}/git-gui
 
@@ -365,21 +372,30 @@ fi
 
 %files svn
 %{_libdir}/git-core/*svn*
+%if %{with docs}
 %{_mandir}/man1/*svn*.1*
+%endif
 
 %files cvs
 %{_bindir}/git-cvsserver
 %{_libdir}/git-core/*cvs*
+
+%if %{with docs}
 %{_mandir}/man1/*cvs*.1*
 %{_mandir}/man7/*cvs*.7*
+%endif
 
 %files arch
 %{_libdir}/git-core/git-archimport
+%if %{with docs}
 %{_mandir}/man1/git-archimport.1*
+%endif
 
 %files email
 %{_libdir}/git-core/*email*
+%if %{with docs}
 %{_mandir}/man1/*email*.1*
+%endif
 
 %files -n perl-Git
 %{perl_vendorlib}/Git.pm
@@ -390,7 +406,9 @@ fi
 %{perl_vendorlib}/FromCPAN
 %{perl_vendorlib}/Git/LoadCPAN.pm
 %{perl_vendorlib}/Git/LoadCPAN
+%if %{with docs}
 %{_mandir}/man3/Git.3pm*
+%endif
 
 %files -n perl-Git-SVN
 %{perl_vendorlib}/Git/SVN
@@ -402,8 +420,10 @@ fi
 %config(noreplace) %{_webappconfdir}/gitweb.conf
 %{_libdir}/git-core/git-instaweb
 %{_datadir}/gitweb
+%if %{with docs}
 %{_mandir}/man1/gitweb.1*
 %{_mandir}/man5/gitweb.conf.5*
+%endif
 
 %files prompt
 %{_sysconfdir}/profile.d/%{profile_branch}
@@ -414,7 +434,9 @@ fi
 %{_unitdir}/git.socket
 
 %files extras
+%if %{with docs}
 %doc Documentation/*.html Documentation/howto Documentation/technical Documentation/RelNotes.txt.gz
+%endif
 %doc %{_docdir}/git-extras
 %{_bindir}/git-resurrect
 %{_bindir}/git-jump
@@ -424,6 +446,7 @@ fi
 %{_datadir}/git-core/templates/hooks/fsmonitor-watchman.sample
 %{_datadir}/git-core/templates/hooks/pre-rebase.sample
 %{_datadir}/git-core/templates/hooks/prepare-commit-msg.sample
+%if %{with docs}
 %{_mandir}/*/git-*
 %{_mandir}/*/git.*
 %{_mandir}/*/gitattributes*
@@ -442,3 +465,4 @@ fi
 %{_mandir}/*/gitcredentials*
 %{_mandir}/*/gitremote-helpers*
 %{_mandir}/man7/*submodule*
+%endif
