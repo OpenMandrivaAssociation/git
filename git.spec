@@ -5,7 +5,7 @@
 %define libname %mklibname git
 %define profile_branch 93git-branch.sh
 %define profile_env 93git-env.sh
-%bcond_with	docs
+%bcond_without	docs
 
 Summary:	Global Information Tracker
 Name:		git
@@ -221,6 +221,7 @@ The git daemon for supporting git:// access to git repositories.
 rm -f Documentation/.gitignore
 # prefix gitweb css/png files with /gitweb
 perl -pi -e 's!^(GITWEB_CSS|GITWEB_LOGO|GITWEB_FAVICON) = !$1 = /gitweb/!' Makefile
+sed -i 's!make CC=clang CXX=clang++!make CC=%{__cc} CXX=%{__cxx}!g' Makefile
 %apply_patches
 
 %build
