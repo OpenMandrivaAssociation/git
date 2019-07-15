@@ -226,7 +226,7 @@ sed -i 's!make CC=clang CXX=clang++!make CC=%{__cc} CXX=%{__cxx}!g' Makefile
 %build
 # same flags and prefix must be passed for make test too
 %define git_make_params prefix=%{_prefix} CC=%{__cc} gitexecdir=%{_libdir}/git-core CFLAGS="%{optflags}" GITWEB_CONFIG=%{_sysconfdir}/gitweb.conf DOCBOOK_XSL_172=0 INSTALLDIRS=vendor perllibdir=%{perl_vendorlib}
-%make CC=%{__cc} AR=%{__ar} %{git_make_params} all
+%make CC=%{__cc} AR=%{__ar} %{git_make_params} all %{?with_docs:doc}
 
 # Produce RelNotes.txt.gz
 # sed trick changes "-x.y.z.txt" to "-x.y.z.0.txt" for ordering, then undoes it
@@ -237,12 +237,11 @@ cd Documentation/RelNotes \
 
 %install
 mkdir -p %{buildroot}%{_bindir}
-%make_install CC=%{__cc} AR=%{__ar} prefix=%{_prefix} gitexecdir=%{_libdir}/git-core  CFLAGS="%{optflags}" INSTALLDIRS=vendor perllibdir=%{perl_vendorlib}
-make CC=%{__cc} AR=%{__ar} prefix=%{_prefix} gitexecdir=%{_libdir}/git-core   DESTDIR=%{buildroot}
+%make_install %{?with_docs:install-doc} CC=%{__cc} AR=%{__ar} prefix=%{_prefix} gitexecdir=%{_libdir}/git-core  CFLAGS="%{optflags}" INSTALLDIRS=vendor perllibdir=%{perl_vendorlib}
 
 # Contrib contains some useful stuff -- let's package it in git-extras
-mv contrib/git-resurrect.sh %{buildroot}%{_bindir}/git-resurrect
-mv contrib/git-jump/git-jump %{buildroot}%{_bindir}/
+cp -a contrib/git-resurrect.sh %{buildroot}%{_bindir}/git-resurrect
+cp -a contrib/git-jump/git-jump %{buildroot}%{_bindir}/
 mkdir -p %{buildroot}%{_docdir}/git-extras
 # Avoid dependencies on obscure perl modules
 find contrib -name "*.pl" -o -name "*.perl" |xargs chmod -x
@@ -306,7 +305,7 @@ install -D -m 0644 %{SOURCE3} %{buildroot}%{_sysconfdir}/profile.d/%{profile_bra
 # an indication of a random error while building man pages
 rm -f %{buildroot}%{_mandir}/man3/private-Error.3*
 
-mv contrib/workdir/git-new-workdir %{buildroot}%{_bindir}/
+cp -a contrib/workdir/git-new-workdir %{buildroot}%{_bindir}/
 
 %find_lang %{name}
 
@@ -348,13 +347,6 @@ fi
 %exclude %{_datadir}/git-core/templates/hooks/fsmonitor-watchman.sample
 %exclude %{_datadir}/git-core/templates/hooks/pre-rebase.sample
 %exclude %{_datadir}/git-core/templates/hooks/prepare-commit-msg.sample
-%if %{with docs}
-%exclude %{_mandir}/man1/*svn*.1*
-%exclude %{_mandir}/man1/*cvs*.1*
-%exclude %{_mandir}/man7/*cvs*.7*
-%exclude %{_mandir}/man1/*email*.1*
-%exclude %{_mandir}/man1/git-archimport.1*
-%endif
 
 %files -n gitk
 %{_bindir}/gitk
@@ -465,4 +457,9 @@ fi
 %{_mandir}/*/gitcredentials*
 %{_mandir}/*/gitremote-helpers*
 %{_mandir}/man7/*submodule*
+%exclude %{_mandir}/man1/*svn*.1*
+%exclude %{_mandir}/man1/*cvs*.1*
+%exclude %{_mandir}/man7/*cvs*.7*
+%exclude %{_mandir}/man1/*email*.1*
+%exclude %{_mandir}/man1/git-archimport.1*
 %endif
