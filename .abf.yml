@@ -1,4 +1,2 @@
-removed_sources:
-  git-2.21.0.tar.xz: 6e798e745683d3a1d862f50bc3b4fde28479d482
 sources:
-  git-2.22.0.tar.xz: 4984f9f7d32e7f967cee15dce4973c231b2308a1
+  git-2.22.1.tar.xz: d61f59af0a0ed552c16c36578e9cb747ec2a71bc
