@@ -221,7 +221,7 @@ rm -f Documentation/.gitignore
 # prefix gitweb css/png files with /gitweb
 perl -pi -e 's!^(GITWEB_CSS|GITWEB_LOGO|GITWEB_FAVICON) = !$1 = /gitweb/!' Makefile
 sed -i 's!make CC=clang CXX=clang++!make CC=%{__cc} CXX=%{__cxx}!g' Makefile
-%apply_patches
+%autopatch -p1
 
 %build
 # same flags and prefix must be passed for make test too
