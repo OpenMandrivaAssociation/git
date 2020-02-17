@@ -112,8 +112,8 @@ Additional tools,scripts and documentation for working with git
 Summary:	Git revision tree visualiser
 Group:		Development/Other
 Requires:	git-core = %{EVRD}
-Requires:	tk >= 8.4
-Requires:	tcl >= 8.4
+Requires:	tk >= 8.6
+Requires:	tcl >= 8.6
 
 %description -n gitk
 Git revision tree visualiser.
