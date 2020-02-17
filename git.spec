@@ -9,8 +9,8 @@
 
 Summary:	Global Information Tracker
 Name:		git
-Version:	2.25.0
-Release:	2
+Version:	2.25.1
+Release:	1
 License:	GPLv2
 Group:		Development/Other
 Url:		http://git-scm.com/
