@@ -9,7 +9,7 @@
 
 Summary:	Global Information Tracker
 Name:		git
-Version:	2.27.0
+Version:	2.28.0
 Release:	1
 License:	GPLv2
 Group:		Development/Other
