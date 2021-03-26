@@ -9,7 +9,7 @@
 
 Summary:	Global Information Tracker
 Name:		git
-Version:	2.30.2
+Version:	2.31.0
 Release:	1
 License:	GPLv2
 Group:		Development/Other
@@ -458,6 +458,7 @@ fi
 %{_mandir}/*/gitremote-helpers*
 %{_mandir}/man7/*submodule*
 %{_mandir}/man7/gitfaq.7*
+%{_mandir}/man5/gitmailmap.5.*
 %exclude %{_mandir}/man1/*svn*.1*
 %exclude %{_mandir}/man1/*cvs*.1*
 %exclude %{_mandir}/man7/*cvs*.7*
