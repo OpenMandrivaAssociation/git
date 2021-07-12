@@ -5,12 +5,12 @@
 %define libname %mklibname git
 %define profile_branch 93git-branch.sh
 %define profile_env 93git-env.sh
-%bcond_without	docs
+%bcond_without docs
 
 Summary:	Global Information Tracker
 Name:		git
 Version:	2.32.0
-Release:	1
+Release:	2
 License:	GPLv2
 Group:		Development/Other
 Url:		http://git-scm.com/
@@ -159,8 +159,10 @@ Git tools for importing Arch repositories.
 Summary:	Git tools for sending email
 Group:		Development/Other
 Requires:	git-core = %{EVRD}
-Suggests:	perl-Authen-SASL
-Suggests:	perl-MIME-Base64
+# (tpg) these days SSL is widely used by email providers
+Requires:	perl(Net::SMTP::SSL)
+Requires:	perl(Authen::SASL)
+Requires:	perl(MIME::Base64)
 
 %description email
 Git tools for sending email.
@@ -208,7 +210,7 @@ Shows the current git branch in your bash prompt.
 Summary:	git:// protocol server
 Group:		System/Servers
 Requires:	git-core = %{EVRD}
-Requires(preun,post,postun):	rpm-helper
+%systemd_requires
 %rename git-daemon
 
 %description server
@@ -317,6 +319,15 @@ if ! LC_ALL=C %make %{git_make_params} test NO_SVN_TESTS=true; then
     printf '%s\n' "WARNING: Some tests failed. You may want to investigate."
 fi
 
+%post server
+%systemd_post git.socket
+
+%preun server
+%systemd_preun git.socket
+
+%postun server
+%systemd_postun_with_restart git.socket
+
 %files
 # no file in the main package
 
@@ -353,7 +364,7 @@ fi
 %{_libdir}/git-core/git-citool
 %{_libdir}/git-core/git-gui
 %if %{with docs}
-%{_mandir}/*/gitk*
+%doc %{_mandir}/*/gitk*
 %endif
 %{_datadir}/gitk
 %{_datadir}/git-gui
@@ -365,7 +376,7 @@ fi
 %files svn
 %{_libdir}/git-core/*svn*
 %if %{with docs}
-%{_mandir}/man1/*svn*.1*
+%doc %{_mandir}/man1/*svn*.1*
 %endif
 
 %files cvs
@@ -373,20 +384,20 @@ fi
 %{_libdir}/git-core/*cvs*
 
 %if %{with docs}
-%{_mandir}/man1/*cvs*.1*
-%{_mandir}/man7/*cvs*.7*
+%doc %{_mandir}/man1/*cvs*.1*
+%doc %{_mandir}/man7/*cvs*.7*
 %endif
 
 %files arch
 %{_libdir}/git-core/git-archimport
 %if %{with docs}
-%{_mandir}/man1/git-archimport.1*
+%doc %{_mandir}/man1/git-archimport.1*
 %endif
 
 %files email
 %{_libdir}/git-core/*email*
 %if %{with docs}
-%{_mandir}/man1/*email*.1*
+%doc %{_mandir}/man1/*email*.1*
 %endif
 
 %files -n perl-Git
@@ -399,7 +410,7 @@ fi
 %{perl_vendorlib}/Git/LoadCPAN.pm
 %{perl_vendorlib}/Git/LoadCPAN
 %if %{with docs}
-%{_mandir}/man3/Git.3pm*
+%doc %{_mandir}/man3/Git.3pm*
 %endif
 
 %files -n perl-Git-SVN
@@ -413,8 +424,8 @@ fi
 %{_libdir}/git-core/git-instaweb
 %{_datadir}/gitweb
 %if %{with docs}
-%{_mandir}/man1/gitweb.1*
-%{_mandir}/man5/gitweb.conf.5*
+%doc %{_mandir}/man1/gitweb.1*
+%doc %{_mandir}/man5/gitweb.conf.5*
 %endif
 
 %files prompt
@@ -439,26 +450,26 @@ fi
 %{_datadir}/git-core/templates/hooks/pre-rebase.sample
 %{_datadir}/git-core/templates/hooks/prepare-commit-msg.sample
 %if %{with docs}
-%{_mandir}/*/git-*
-%{_mandir}/*/git.*
-%{_mandir}/*/gitattributes*
-%{_mandir}/*/gitignore*
-%{_mandir}/*/gitmodules*
-%{_mandir}/*/gitnamespaces*
-%{_mandir}/*/gitcli*
-%{_mandir}/*/giteveryday*
-%{_mandir}/*/githooks*
-%{_mandir}/*/gitrepository*
-%{_mandir}/*/*tutorial*
-%{_mandir}/*/*glossary*
-%{_mandir}/*/gitdiffcore*
-%{_mandir}/*/gitworkflows*
-%{_mandir}/*/gitrevisions*
-%{_mandir}/*/gitcredentials*
-%{_mandir}/*/gitremote-helpers*
-%{_mandir}/man7/*submodule*
-%{_mandir}/man7/gitfaq.7*
-%{_mandir}/man5/gitmailmap.5.*
+%doc %{_mandir}/*/git-*
+%doc %{_mandir}/*/git.*
+%doc %{_mandir}/*/gitattributes*
+%doc %{_mandir}/*/gitignore*
+%doc %{_mandir}/*/gitmodules*
+%doc %{_mandir}/*/gitnamespaces*
+%doc %{_mandir}/*/gitcli*
+%doc %{_mandir}/*/giteveryday*
+%doc %{_mandir}/*/githooks*
+%doc %{_mandir}/*/gitrepository*
+%doc %{_mandir}/*/*tutorial*
+%doc %{_mandir}/*/*glossary*
+%doc %{_mandir}/*/gitdiffcore*
+%doc %{_mandir}/*/gitworkflows*
+%doc %{_mandir}/*/gitrevisions*
+%doc %{_mandir}/*/gitcredentials*
+%doc %{_mandir}/*/gitremote-helpers*
+%doc %{_mandir}/man7/*submodule*
+%doc %{_mandir}/man7/gitfaq.7*
+%doc %{_mandir}/man5/gitmailmap.5.*
 %exclude %{_mandir}/man1/*svn*.1*
 %exclude %{_mandir}/man1/*cvs*.1*
 %exclude %{_mandir}/man7/*cvs*.7*
