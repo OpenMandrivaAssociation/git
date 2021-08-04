@@ -7,14 +7,16 @@
 %define profile_env 93git-env.sh
 %bcond_without docs
 
+%define beta rc0
+
 Summary:	Global Information Tracker
 Name:		git
-Version:	2.32.0
-Release:	2
+Version:	2.33.0
+Release:	%{?beta:0.%{beta}.}1
 License:	GPLv2
 Group:		Development/Other
 Url:		http://git-scm.com/
-Source0:	https://www.kernel.org/pub/software/scm/git/%{name}-%{version}.tar.xz
+Source0:	https://www.kernel.org/pub/software/scm/git/%{?beta:testing/}%{name}-%{version}%{?beta:.%{beta}}.tar.xz
 Source2:	gitweb.conf
 Source3:	%{profile_branch}
 # Do we really need it? It's not used anyway
@@ -217,13 +219,12 @@ Requires:	git-core = %{EVRD}
 The git daemon for supporting git:// access to git repositories.
 
 %prep
-%setup -q
+%autosetup -p1 -n %{name}-%{version}%{?beta:.%{beta}}
 # remove boring file
 rm -f Documentation/.gitignore
 # prefix gitweb css/png files with /gitweb
 perl -pi -e 's!^(GITWEB_CSS|GITWEB_LOGO|GITWEB_FAVICON) = !$1 = /gitweb/!' Makefile
 sed -i 's!make CC=clang CXX=clang++!make CC=%{__cc} CXX=%{__cxx}!g' Makefile
-%autopatch -p1
 
 %build
 # same flags and prefix must be passed for make test too
