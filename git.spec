@@ -11,7 +11,7 @@
 
 Summary:	Global Information Tracker
 Name:		git
-Version:	2.35.1
+Version:	2.36.1
 Release:	%{?beta:0.%{beta}.}1
 License:	GPLv2
 Group:		Development/Other
@@ -441,7 +441,7 @@ fi
 %if %{with docs}
 %doc Documentation/*.html Documentation/howto Documentation/technical Documentation/RelNotes.txt.gz
 %endif
-%doc %{_docdir}/git-extras
+%doc %{_docdir}/git-extras/contrib
 %{_bindir}/git-resurrect
 %{_bindir}/git-jump
 %{_libdir}/git-core/git-add--interactive
