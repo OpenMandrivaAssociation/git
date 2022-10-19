@@ -1,9 +1,9 @@
-diff -up git-2.17.0/Makefile.0000~ git-2.17.0/Makefile
---- git-2.17.0/Makefile.0000~	2018-04-08 22:37:43.627977208 +0200
-+++ git-2.17.0/Makefile	2018-04-08 22:38:05.313096243 +0200
-@@ -498,8 +498,8 @@ htmldir_relative = $(patsubst $(prefix)/
- export prefix bindir sharedir sysconfdir gitwebdir perllibdir localedir
-
+diff -up git-2.38.1/Makefile.1~ git-2.38.1/Makefile
+--- git-2.38.1/Makefile.1~	2022-10-19 00:54:24.334645798 +0200
++++ git-2.38.1/Makefile	2022-10-19 00:54:47.817825346 +0200
+@@ -570,8 +570,8 @@ perllibdir_relative = $(patsubst $(prefi
+ export prefix bindir sharedir sysconfdir perllibdir localedir
+ 
  # Set our default programs
 -CC = cc
 -AR = ar

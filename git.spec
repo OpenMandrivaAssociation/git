@@ -11,7 +11,7 @@
 
 Summary:	Global Information Tracker
 Name:		git
-Version:	2.37.2
+Version:	2.38.1
 Release:	%{?beta:0.%{beta}.}1
 License:	GPLv2
 Group:		Development/Other
@@ -44,6 +44,7 @@ Requires:	git-core = %{EVRD}
 Suggests:	gitk = %{EVRD}
 Suggests:	git-svn = %{EVRD}
 Suggests:	git-email = %{EVRD}
+Suggests:	git-scalar = %{EVRD}
 Suggests:	git-arch = %{EVRD}
 Suggests:	git-cvs = %{EVRD}
 
@@ -62,9 +63,10 @@ Summary:	Full git suite
 Group:		Development/Other
 Requires:	git = %{EVRD}
 Requires:	git-core = %{EVRD}
-Requires:	gitk = %{EVRD}
+Suggests:	gitk = %{EVRD}
 Suggests:	git-svn = %{EVRD}
-Requires:	git-email = %{EVRD}
+Suggests:	git-email = %{EVRD}
+Suggests:	git-scalar = %{EVRD}
 Suggests:	git-arch = %{EVRD}
 Suggests:	git-core-oldies = %{EVRD}
 Suggests:	git-cvs = %{EVRD}
@@ -168,6 +170,35 @@ Requires:	perl(MIME::Base64)
 
 %description email
 Git tools for sending email.
+
+%package scalar
+Summary:	Tools for git scalability
+Group:		Development/Tools
+Requires:	git-core = %{EVRD}
+
+%description scalar
+Scalar is a tool that helps Git scale to some of the largest Git repositories.
+It achieves this by enabling some advanced Git features, such as:
+
+* Partial clone: reduces time to get a working repository by not downloading
+  all Git objects right away.
+
+* Background prefetch: downloads Git object data from all remotes every
+  hour, reducing the amount of time for foreground git fetch calls.
+
+* Sparse-checkout: limits the size of your working directory.
+
+* File system monitor: tracks the recently modified files and eliminates
+  the need for Git to scan the entire worktree.
+
+* Commit-graph: accelerates commit walks and reachability calculations,
+  speeding up commands like git log.
+
+* Multi-pack-index: enables fast object lookups across many pack-files.
+
+* Incremental repack: Repacks the packed Git data into fewer pack-file
+  without disrupting concurrent commands by using the multi-pack-index.
+
 
 %package -n perl-Git
 Summary:	Perl interface to Git
@@ -401,6 +432,10 @@ fi
 %doc %{_mandir}/man1/*email*.1*
 %endif
 
+%files scalar
+%{_bindir}/scalar
+%doc %{_mandir}/man1/scalar.1*
+
 %files -n perl-Git
 %{perl_vendorlib}/Git.pm
 %dir %{perl_vendorlib}/Git
@@ -470,7 +505,9 @@ fi
 %doc %{_mandir}/*/gitremote-helpers*
 %doc %{_mandir}/man7/*submodule*
 %doc %{_mandir}/man7/gitfaq.7*
-%doc %{_mandir}/man5/gitmailmap.5.*
+%doc %{_mandir}/man5/gitmailmap.5*
+%doc %{_mandir}/man5/gitformat-*.5*
+%doc %{_mandir}/man5/gitprotocol-*.5*
 %exclude %{_mandir}/man1/*svn*.1*
 %exclude %{_mandir}/man1/*cvs*.1*
 %exclude %{_mandir}/man7/*cvs*.7*
