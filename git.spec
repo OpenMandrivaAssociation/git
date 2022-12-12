@@ -11,7 +11,7 @@
 
 Summary:	Global Information Tracker
 Name:		git
-Version:	2.38.1
+Version:	2.39.0
 Release:	%{?beta:0.%{beta}.}1
 License:	GPLv2
 Group:		Development/Other
@@ -390,6 +390,16 @@ fi
 %exclude %{_datadir}/git-core/templates/hooks/fsmonitor-watchman.sample
 %exclude %{_datadir}/git-core/templates/hooks/pre-rebase.sample
 %exclude %{_datadir}/git-core/templates/hooks/prepare-commit-msg.sample
+%if %{with docs}
+%doc %{_mandir}/man1/git*.1*
+%exclude %{_mandir}/man1/*archimport*.1*
+%exclude %{_mandir}/man1/*cvs*.1*
+%exclude %{_mandir}/man1/*email*.1*
+%exclude %{_mandir}/man1/gitweb.1*
+%doc %{_mandir}/man5/*
+%exclude %{_mandir}/man5/gitweb.conf.*
+%doc %{_mandir}/man7/*
+%endif
 
 %files -n gitk
 %{_bindir}/gitk
@@ -434,7 +444,9 @@ fi
 
 %files scalar
 %{_bindir}/scalar
+%if %{with docs}
 %doc %{_mandir}/man1/scalar.1*
+%endif
 
 %files -n perl-Git
 %{perl_vendorlib}/Git.pm
@@ -485,32 +497,3 @@ fi
 %{_datadir}/git-core/templates/hooks/fsmonitor-watchman.sample
 %{_datadir}/git-core/templates/hooks/pre-rebase.sample
 %{_datadir}/git-core/templates/hooks/prepare-commit-msg.sample
-%if %{with docs}
-%doc %{_mandir}/*/git-*
-%doc %{_mandir}/*/git.*
-%doc %{_mandir}/*/gitattributes*
-%doc %{_mandir}/*/gitignore*
-%doc %{_mandir}/*/gitmodules*
-%doc %{_mandir}/*/gitnamespaces*
-%doc %{_mandir}/*/gitcli*
-%doc %{_mandir}/*/giteveryday*
-%doc %{_mandir}/*/githooks*
-%doc %{_mandir}/*/gitrepository*
-%doc %{_mandir}/*/*tutorial*
-%doc %{_mandir}/*/*glossary*
-%doc %{_mandir}/*/gitdiffcore*
-%doc %{_mandir}/*/gitworkflows*
-%doc %{_mandir}/*/gitrevisions*
-%doc %{_mandir}/*/gitcredentials*
-%doc %{_mandir}/*/gitremote-helpers*
-%doc %{_mandir}/man7/*submodule*
-%doc %{_mandir}/man7/gitfaq.7*
-%doc %{_mandir}/man5/gitmailmap.5*
-%doc %{_mandir}/man5/gitformat-*.5*
-%doc %{_mandir}/man5/gitprotocol-*.5*
-%exclude %{_mandir}/man1/*svn*.1*
-%exclude %{_mandir}/man1/*cvs*.1*
-%exclude %{_mandir}/man7/*cvs*.7*
-%exclude %{_mandir}/man1/*email*.1*
-%exclude %{_mandir}/man1/git-archimport.1*
-%endif
