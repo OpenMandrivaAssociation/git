@@ -7,11 +7,11 @@
 %define profile_env 93git-env.sh
 %bcond_without docs
 
-#define beta rc2
+%define beta rc0
 
 Summary:	Global Information Tracker
 Name:		git
-Version:	2.39.2
+Version:	2.40.0
 Release:	%{?beta:0.%{beta}.}1
 License:	GPLv2
 Group:		Development/Other
@@ -383,7 +383,6 @@ fi
 %exclude %{_libdir}/git-core/git-citool
 %exclude %{_libdir}/git-core/git-gui
 %exclude %{_libdir}/git-core/git-instaweb
-%exclude %{_libdir}/git-core/git-add--interactive
 %exclude %{_libdir}/git-core/git-filter-branch
 %exclude %{_libdir}/git-core/git-request-pull
 %{_datadir}/git-core
@@ -491,7 +490,6 @@ fi
 %doc %{_docdir}/git-extras/contrib
 %{_bindir}/git-resurrect
 %{_bindir}/git-jump
-%{_libdir}/git-core/git-add--interactive
 %{_libdir}/git-core/git-filter-branch
 %{_libdir}/git-core/git-request-pull
 %{_datadir}/git-core/templates/hooks/fsmonitor-watchman.sample
