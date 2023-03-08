@@ -7,7 +7,7 @@
 %define profile_env 93git-env.sh
 %bcond_without docs
 
-%define beta rc0
+%define beta rc2
 
 Summary:	Global Information Tracker
 Name:		git
