@@ -7,11 +7,11 @@
 %define profile_env 93git-env.sh
 %bcond_without docs
 
-#define beta rc2
+%define beta rc1
 
 Summary:	Global Information Tracker
 Name:		git
-Version:	2.40.1
+Version:	2.41.0
 Release:	%{?beta:0.%{beta}.}1
 License:	GPLv2
 Group:		Development/Other
