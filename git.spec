@@ -27,6 +27,7 @@ Source6:	git.socket
 
 BuildRequires:	asciidoc
 BuildRequires:	perl-CGI
+BuildRequires:	gettext
 %if %{with docs}
 BuildRequires:	xmlto
 BuildRequires:	docbook-dtd45-xml
