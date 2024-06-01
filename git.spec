@@ -11,7 +11,7 @@
 
 Summary:	Global Information Tracker
 Name:		git
-Version:	2.45.1
+Version:	2.45.2
 Release:	%{?beta:0.%{beta}.}1
 License:	GPLv2
 Group:		Development/Other
