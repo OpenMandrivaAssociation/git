@@ -15,7 +15,7 @@ Version:	2.47.0
 Release:	%{?beta:0.%{beta}.}1
 License:	GPLv2
 Group:		Development/Other
-Url:		http://git-scm.com/
+Url:		https://git-scm.com/
 Source0:	https://www.kernel.org/pub/software/scm/git/%{?beta:testing/}%{name}-%{version}%{?beta:.%{beta}}.tar.xz
 Source2:	gitweb.conf
 Source3:	%{profile_branch}
