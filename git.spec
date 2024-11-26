@@ -11,8 +11,8 @@
 
 Summary:	Global Information Tracker
 Name:		git
-Version:	2.47.0
-Release:	%{?beta:0.%{beta}.}2
+Version:	2.47.1
+Release:	%{?beta:0.%{beta}.}1
 License:	GPLv2
 Group:		Development/Other
 Url:		https://git-scm.com/
