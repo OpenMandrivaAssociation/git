@@ -11,7 +11,7 @@
 
 Summary:	Global Information Tracker
 Name:		git
-Version:	2.47.1
+Version:	2.49.0
 Release:	%{?beta:0.%{beta}.}1
 License:	GPLv2
 Group:		Development/Other
@@ -263,12 +263,12 @@ sed -i 's!make CC=clang CXX=clang++!make CC=%{__cc} CXX=%{__cxx}!g' Makefile
 %define git_make_params prefix=%{_prefix} CC=%{__cc} gitexecdir=%{_libdir}/git-core CFLAGS="%{optflags}" GITWEB_CONFIG=%{_sysconfdir}/gitweb.conf DOCBOOK_XSL_172=0 INSTALLDIRS=vendor perllibdir=%{perl_vendorlib}
 %make CC=%{__cc} AR=%{__ar} %{git_make_params} all %{?with_docs:doc}
 
-# Produce RelNotes.txt.gz
-# sed trick changes "-x.y.z.txt" to "-x.y.z.0.txt" for ordering, then undoes it
+# Produce RelNotes.adoc.xz
+# sed trick changes "-x.y.z.adoc" to "-x.y.z.0.adoc" for ordering, then undoes it
 # use awk to print a newline before each RelNotes header
 cd Documentation/RelNotes \
-&& relnotesls="`find . -name '*.txt' | sed 's/\([0-9]\.[0-9]\.[0-9]\)\.txt/\1.0.txt/' | sort -nr | sed 's/\([0-9]\.[0-9]\.[0-9]\)\.0\.txt/\1.txt/'`" \
-&& awk 'FNR == 1 { print "" } { print }' $relnotesls | gzip -9c >../RelNotes.txt.gz
+&& relnotesls="`find . -name '*.adoc' | sed 's/\([0-9]\.[0-9]\.[0-9]\)\.adoc/\1.0.adoc/' | sort -nr | sed 's/\([0-9]\.[0-9]\.[0-9]\)\.0\.adoc/\1.adoc/'`" \
+&& awk 'FNR == 1 { print "" } { print }' $relnotesls | xz -9ec >../RelNotes.adoc.xz
 
 %install
 mkdir -p %{buildroot}%{_bindir}
@@ -486,7 +486,7 @@ fi
 
 %files extras
 %if %{with docs}
-%doc Documentation/*.html Documentation/howto Documentation/technical Documentation/RelNotes.txt.gz
+%doc Documentation/*.html Documentation/howto Documentation/technical Documentation/RelNotes.adoc.xz
 %endif
 %doc %{_docdir}/git-extras/contrib
 %{_bindir}/git-resurrect
