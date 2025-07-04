@@ -1,0 +1,15 @@
+diff -up git-2.50.0/gitk-git/gitk.omv~ git-2.50.0/gitk-git/gitk
+--- git-2.50.0/gitk-git/gitk.omv~	2025-07-04 23:08:34.316305554 +0200
++++ git-2.50.0/gitk-git/gitk	2025-07-04 23:13:55.057174020 +0200
+@@ -12453,9 +12453,9 @@ namespace import ::msgcat::mc
+ ::msgcat::mcload $gitk_msgsdir
+ 
+ # First check that Tcl/Tk is recent enough
+-if {[catch {package require Tk 8.4} err]} {
++if {[catch {package require Tk 9.0} err]} {
+     show_error {} . [mc "Sorry, gitk cannot run with this version of Tcl/Tk.\n\
+-                         Gitk requires at least Tcl/Tk 8.4."]
++                         Gitk requires at least Tcl/Tk 9.0."]
+     exit 1
+ }
+ 

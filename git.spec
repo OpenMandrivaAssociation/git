@@ -11,7 +11,7 @@
 
 Summary:	Global Information Tracker
 Name:		git
-Version:	2.49.0
+Version:	2.50.0
 Release:	%{?beta:0.%{beta}.}1
 License:	GPLv2
 Group:		Development/Other
@@ -21,7 +21,6 @@ Source2:	gitweb.conf
 Source3:	%{profile_branch}
 # Do we really need it? It's not used anyway
 Source4:	%{profile_env}
-Patch0:		git-1.8-do-not-use-hardcoded-defs.patch
 Source5:	git.service
 Source6:	git.socket
 
@@ -48,6 +47,10 @@ Suggests:	git-email = %{EVRD}
 Suggests:	git-scalar = %{EVRD}
 Suggests:	git-arch = %{EVRD}
 Suggests:	git-cvs = %{EVRD}
+
+%patchlist
+git-1.8-do-not-use-hardcoded-defs.patch
+gitk-2.50.0-tk-9.0.patch
 
 %description
 This is a stupid (but extremely fast) directory content manager.  It
@@ -370,6 +373,7 @@ fi
 %files core -f %{name}.lang
 /etc/emacs/site-start.d/*
 /etc/bash_completion.d/*
+%{_datadir}/bash-completion/completions/git
 %{_datadir}/emacs/site-lisp/*
 %{_bindir}/git
 %{_bindir}/git-new-workdir
