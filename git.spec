@@ -12,7 +12,7 @@
 Summary:	Global Information Tracker
 Name:		git
 Version:	2.50.0
-Release:	%{?beta:0.%{beta}.}2
+Release:	%{?beta:0.%{beta}.}3
 License:	GPLv2
 Group:		Development/Other
 Url:		https://git-scm.com/
@@ -50,7 +50,7 @@ Suggests:	git-cvs = %{EVRD}
 
 %patchlist
 git-1.8-do-not-use-hardcoded-defs.patch
-gitk-2.50.0-tk-9.0.patch
+gitk_tcl9_fix.patch 
 port_git_gui_to_tcl_9.patch 
 
 %description
