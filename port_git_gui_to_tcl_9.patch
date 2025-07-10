@@ -1,8 +1,7 @@
-diff --git a/git-gui/git-gui.sh b/git-gui/git-gui.sh
-index 28572c8..62c8ca3 100755
---- a/git-gui/git-gui.sh
-+++ b/git-gui/git-gui.sh
-@@ -30,8 +30,8 @@ along with this program; if not, see <https://www.gnu.org/licenses/>.}]
+diff -up git-2.50.1/git-gui/git-gui.sh.3~ git-2.50.1/git-gui/git-gui.sh
+--- git-2.50.1/git-gui/git-gui.sh.3~	2025-06-16 07:11:33.000000000 +0200
++++ git-2.50.1/git-gui/git-gui.sh	2025-07-10 15:57:24.807474480 +0200
+@@ -30,8 +30,8 @@ along with this program; if not, see <ht
  ##
  ## Tcl/Tk sanity check
  
@@ -13,42 +12,32 @@ index 28572c8..62c8ca3 100755
  } {
  	catch {wm withdraw .}
  	tk_messageBox \
-@@ -528,7 +528,7 @@ proc _git_cmd {name} {
- proc is_shellscript {filename} {
- 	if {![file exists $filename]} {return 0}
- 	set f [open $filename r]
--	fconfigure $f -encoding binary
-+	fconfigure $f -translation binary
- 	set magic [read $f 2]
- 	close $f
- 	return [expr {$magic eq "#!"}]
-@@ -1556,15 +1556,15 @@ proc rescan_stage2 {fd after} {
+@@ -1579,15 +1579,15 @@ proc rescan_stage2 {fd after} {
  	}
- 	set fd_df [git_read diff-files -z]
+ 	set fd_df [git_read [list diff-files -z]]
  
 -	fconfigure $fd_di -blocking 0 -translation binary -encoding binary
 -	fconfigure $fd_df -blocking 0 -translation binary -encoding binary
-+	fconfigure $fd_di -blocking 0 -translation binary 
-+	fconfigure $fd_df -blocking 0 -translation binary 
++	fconfigure $fd_di -blocking 0 -translation binary
++	fconfigure $fd_df -blocking 0 -translation binary
  
  	fileevent $fd_di readable [list read_diff_index $fd_di $after]
  	fileevent $fd_df readable [list read_diff_files $fd_df $after]
  
  	if {[is_config_true gui.displayuntracked]} {
- 		set fd_lo [eval git_read ls-files --others -z $ls_others]
+ 		set fd_lo [git_read [concat ls-files --others -z $ls_others]]
 -		fconfigure $fd_lo -blocking 0 -translation binary -encoding binary
-+		fconfigure $fd_lo -blocking 0 -translation binary 
++		fconfigure $fd_lo -blocking 0 -translation binary
  		fileevent $fd_lo readable [list read_ls_others $fd_lo $after]
  		incr rescan_active
  	}
-diff --git a/git-gui/lib/blame.tcl b/git-gui/lib/blame.tcl
-index 8441e10..f3ba899 100644
---- a/git-gui/lib/blame.tcl
-+++ b/git-gui/lib/blame.tcl
+diff -up git-2.50.1/git-gui/lib/blame.tcl.3~ git-2.50.1/git-gui/lib/blame.tcl
+--- git-2.50.1/git-gui/lib/blame.tcl.3~	2025-06-16 07:11:33.000000000 +0200
++++ git-2.50.1/git-gui/lib/blame.tcl	2025-07-10 15:57:58.948298732 +0200
 @@ -987,7 +987,7 @@ method _showcommit {cur_w lno} {
  			set msg {}
  			catch {
- 				set fd [git_read cat-file commit $cmit]
+ 				set fd [git_read [list cat-file commit $cmit]]
 -				fconfigure $fd -encoding binary -translation lf
 +				fconfigure $fd -translation binary -translation lf
  				# By default commits are assumed to be in utf-8
@@ -62,46 +51,44 @@ index 8441e10..f3ba899 100644
  			-translation binary
  		fileevent $fd readable [cb _read_diff_load_commit \
  			$fd $cparent $new_path $r_orig_line]
-diff --git a/git-gui/lib/choose_repository.tcl b/git-gui/lib/choose_repository.tcl
-index d23abed..5aa408e 100644
---- a/git-gui/lib/choose_repository.tcl
-+++ b/git-gui/lib/choose_repository.tcl
+diff -up git-2.50.1/git-gui/lib/choose_repository.tcl.3~ git-2.50.1/git-gui/lib/choose_repository.tcl
+--- git-2.50.1/git-gui/lib/choose_repository.tcl.3~	2025-06-16 07:11:33.000000000 +0200
++++ git-2.50.1/git-gui/lib/choose_repository.tcl	2025-07-10 15:58:39.577912396 +0200
 @@ -643,8 +643,8 @@ method _do_clone2 {} {
  				file mkdir [gitdir objects info]
- 				set f_in [open [file join $objdir info alternates] r]
- 				set f_cp [open [gitdir objects info alternates] w]
+ 				set f_in [safe_open_file [file join $objdir info alternates] r]
+ 				set f_cp [safe_open_file [gitdir objects info alternates] w]
 -				fconfigure $f_in -translation binary -encoding binary
 -				fconfigure $f_cp -translation binary -encoding binary
-+				fconfigure $f_in -translation binary 
++				fconfigure $f_in -translation binary
 +				fconfigure $f_cp -translation binary
  				cd $objdir
  				while {[gets $f_in line] >= 0} {
  					puts $f_cp [file normalize $line]
 @@ -762,8 +762,8 @@ method _copy_files {objdir tocopy} {
  		if {[catch {
- 				set f_in [open [file join $objdir $p] r]
- 				set f_cp [open [file join .git objects $p] w]
+ 				set f_in [safe_open_file [file join $objdir $p] r]
+ 				set f_cp [safe_open_file [file join .git objects $p] w]
 -				fconfigure $f_in -translation binary -encoding binary
 -				fconfigure $f_cp -translation binary -encoding binary
-+				fconfigure $f_in -translation binary 
-+				fconfigure $f_cp -translation binary 
++				fconfigure $f_in -translation binary
++				fconfigure $f_cp -translation binary
  
  				while {![eof $f_in]} {
  					incr cmp [fcopy $f_in $f_cp -size 16384]
-diff --git a/git-gui/lib/commit.tcl b/git-gui/lib/commit.tcl
-index a570f9c..446276e 100644
---- a/git-gui/lib/commit.tcl
-+++ b/git-gui/lib/commit.tcl
-@@ -28,7 +28,7 @@ You are currently in the middle of a merge that has not been fully completed.  Y
+diff -up git-2.50.1/git-gui/lib/commit.tcl.3~ git-2.50.1/git-gui/lib/commit.tcl
+--- git-2.50.1/git-gui/lib/commit.tcl.3~	2025-06-16 07:11:33.000000000 +0200
++++ git-2.50.1/git-gui/lib/commit.tcl	2025-07-10 16:00:03.269183899 +0200
+@@ -28,7 +28,7 @@ You are currently in the middle of a mer
  			set name ""
  			set email ""
- 			set fd [git_read cat-file commit $curHEAD]
+ 			set fd [git_read [list cat-file commit $curHEAD]]
 -			fconfigure $fd -encoding binary -translation lf
 +			fconfigure $fd -translation binary -translation lf
  			# By default commits are assumed to be in utf-8
  			set enc utf-8
  			while {[gets $fd line] > 0} {
-@@ -211,9 +211,7 @@ You must stage at least 1 file before you can commit.
+@@ -211,9 +211,7 @@ You must stage at least 1 file before yo
  	# Strip trailing whitespace
  	regsub -all -line {[ \t\r]+$} $msg {} msg
  	# Strip comment lines
@@ -112,20 +99,19 @@ index a570f9c..446276e 100644
  	# Strip leading empty lines
  	regsub {^\n*} $msg {} msg
  	# Compress consecutive empty lines
-@@ -362,7 +360,7 @@ proc commit_committree {fd_wt curHEAD msg_p} {
+@@ -362,7 +360,7 @@ proc commit_committree {fd_wt curHEAD ms
  	#
  	if {$commit_type eq {normal}} {
- 		set fd_ot [git_read cat-file commit $PARENT]
+ 		set fd_ot [git_read [list cat-file commit $PARENT]]
 -		fconfigure $fd_ot -encoding binary -translation lf
 +		fconfigure $fd_ot -translation binary -translation lf
  		set old_tree [gets $fd_ot]
  		close $fd_ot
  
-diff --git a/git-gui/lib/index.tcl b/git-gui/lib/index.tcl
-index d2ec24b..8eba726 100644
---- a/git-gui/lib/index.tcl
-+++ b/git-gui/lib/index.tcl
-@@ -80,7 +80,6 @@ proc update_indexinfo {msg path_list after} {
+diff -up git-2.50.1/git-gui/lib/index.tcl.3~ git-2.50.1/git-gui/lib/index.tcl
+--- git-2.50.1/git-gui/lib/index.tcl.3~	2025-06-16 07:11:33.000000000 +0200
++++ git-2.50.1/git-gui/lib/index.tcl	2025-07-10 15:55:55.442742349 +0200
+@@ -80,7 +80,6 @@ proc update_indexinfo {msg path_list aft
  		-blocking 0 \
  		-buffering full \
  		-buffersize 512 \
@@ -133,7 +119,7 @@ index d2ec24b..8eba726 100644
  		-translation binary
  	fileevent $fd writable [list \
  		write_update_indexinfo \
-@@ -149,7 +148,6 @@ proc update_index {msg path_list after} {
+@@ -149,7 +148,6 @@ proc update_index {msg path_list after}
  		-blocking 0 \
  		-buffering full \
  		-buffersize 512 \
@@ -141,7 +127,7 @@ index d2ec24b..8eba726 100644
  		-translation binary
  	fileevent $fd writable [list \
  		write_update_index \
-@@ -229,7 +227,6 @@ proc checkout_index {msg path_list after capture_error} {
+@@ -229,7 +227,6 @@ proc checkout_index {msg path_list after
  		-blocking 0 \
  		-buffering full \
  		-buffersize 512 \
@@ -149,20 +135,19 @@ index d2ec24b..8eba726 100644
  		-translation binary
  	fileevent $fd writable [list \
  		write_checkout_index \
-diff --git a/git-gui/lib/mergetool.tcl b/git-gui/lib/mergetool.tcl
-index 8b8c16b..45805e3 100644
---- a/git-gui/lib/mergetool.tcl
-+++ b/git-gui/lib/mergetool.tcl
+diff -up git-2.50.1/git-gui/lib/mergetool.tcl.3~ git-2.50.1/git-gui/lib/mergetool.tcl
+--- git-2.50.1/git-gui/lib/mergetool.tcl.3~	2025-06-16 07:11:33.000000000 +0200
++++ git-2.50.1/git-gui/lib/mergetool.tcl	2025-07-10 16:00:17.478074550 +0200
 @@ -90,7 +90,7 @@ proc merge_load_stages {path cont} {
  
- 	set merge_stages_fd [eval git_read ls-files -u -z -- {$path}]
+ 	set merge_stages_fd [git_read [list ls-files -u -z -- $path]]
  
 -	fconfigure $merge_stages_fd -blocking 0 -translation binary -encoding binary
-+	fconfigure $merge_stages_fd -blocking 0 -translation binary 
++	fconfigure $merge_stages_fd -blocking 0 -translation binary
  	fileevent $merge_stages_fd readable [list read_merge_stages $merge_stages_fd $cont]
  }
  
-@@ -370,7 +370,7 @@ proc merge_tool_start {cmdline target backup stages} {
+@@ -370,7 +370,7 @@ proc merge_tool_start {cmdline target ba
  
  	ui_status [mc "Running merge tool..."]
  
