@@ -11,7 +11,7 @@
 
 Summary:	Global Information Tracker
 Name:		git
-Version:	2.50.1
+Version:	2.51.2
 Release:	%{?beta:0.%{beta}.}1
 License:	GPLv2
 Group:		Development/Other
@@ -50,8 +50,6 @@ Suggests:	git-cvs = %{EVRD}
 
 %patchlist
 git-1.8-do-not-use-hardcoded-defs.patch
-gitk_tcl9_fix.patch 
-port_git_gui_to_tcl_9.patch 
 
 %description
 This is a stupid (but extremely fast) directory content manager.  It
@@ -279,7 +277,6 @@ mkdir -p %{buildroot}%{_bindir}
 %make_install %{?with_docs:install-doc} CC=%{__cc} AR=%{__ar} prefix=%{_prefix} gitexecdir=%{_libdir}/git-core  CFLAGS="%{optflags}" INSTALLDIRS=vendor perllibdir=%{perl_vendorlib}
 
 # Contrib contains some useful stuff -- let's package it in git-extras
-cp -a contrib/git-resurrect.sh %{buildroot}%{_bindir}/git-resurrect
 cp -a contrib/git-jump/git-jump %{buildroot}%{_bindir}/
 mkdir -p %{buildroot}%{_docdir}/git-extras
 # Avoid dependencies on obscure perl modules
@@ -322,13 +319,6 @@ EOF
 # fix .sp in man files
 find %{buildroot}/%{_mandir} -type f | xargs perl -e 's/\.sp$/\n\.sp/g' -pi
 
-# emacs VC backend:
-mkdir -p %{buildroot}{%{_datadir}/emacs/site-lisp,/etc/emacs/site-start.d}
-install -m 644 contrib/emacs/*.el %{buildroot}%{_datadir}/emacs/site-lisp
-cat >%{buildroot}/etc/emacs/site-start.d/vc_git.el <<EOF
-(add-to-list 'vc-handled-backends 'GIT)
-EOF
-
 # install bash-completion file
 mkdir -p %{buildroot}%{_sysconfdir}/bash_completion.d
 install -m644 contrib/completion/git-completion.bash \
@@ -343,8 +333,6 @@ install -D -m 0644 %{SOURCE3} %{buildroot}%{_sysconfdir}/profile.d/%{profile_bra
 # Sometimes created, sometimes not -- its presence actually seems to be
 # an indication of a random error while building man pages
 rm -f %{buildroot}%{_mandir}/man3/private-Error.3*
-
-cp -a contrib/workdir/git-new-workdir %{buildroot}%{_bindir}/
 
 %find_lang %{name}
 
@@ -372,12 +360,9 @@ fi
 # no file in this package
 
 %files core -f %{name}.lang
-/etc/emacs/site-start.d/*
 /etc/bash_completion.d/*
 %{_datadir}/bash-completion/completions/git
-%{_datadir}/emacs/site-lisp/*
 %{_bindir}/git
-%{_bindir}/git-new-workdir
 %{_bindir}/git-receive-pack
 %{_bindir}/git-upload-archive
 %{_bindir}/git-upload-pack
@@ -494,7 +479,6 @@ fi
 %doc Documentation/*.html Documentation/howto Documentation/technical Documentation/RelNotes.adoc.xz
 %endif
 %doc %{_docdir}/git-extras/contrib
-%{_bindir}/git-resurrect
 %{_bindir}/git-jump
 %{_libdir}/git-core/git-filter-branch
 %{_libdir}/git-core/git-request-pull
