@@ -24,6 +24,7 @@ Source4:	%{profile_env}
 Source5:	git.service
 Source6:	git.socket
 
+BuildRequires:	make
 BuildRequires:	asciidoc
 BuildRequires:	perl-CGI
 BuildRequires:	gettext
