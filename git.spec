@@ -11,8 +11,8 @@
 
 Summary:	Global Information Tracker
 Name:		git
-Version:	2.53.0
-Release:	%{?beta:0.%{beta}.}2
+Version:	2.55.0
+Release:	%{?beta:0.%{beta}.}1
 License:	GPLv2
 Group:		Development/Other
 Url:		https://git-scm.com/
@@ -51,6 +51,7 @@ Suggests:	git-cvs = %{EVRD}
 
 %patchlist
 git-1.8-do-not-use-hardcoded-defs.patch
+git-2.55.0-rust-sucks.patch
 
 %description
 This is a stupid (but extremely fast) directory content manager.  It
