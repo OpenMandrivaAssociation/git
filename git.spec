@@ -52,6 +52,9 @@ Suggests:	git-cvs = %{EVRD}
 %patchlist
 git-1.8-do-not-use-hardcoded-defs.patch
 git-2.56.0-rust-sucks.patch
+# gitk-2.50.0-tk-9.0.patch is intentionally NOT listed here and NOT applied:
+# gitk no longer needs it, but we keep it as reference material for how to fix a
+# gitk that breaks on the tk 9.0 update. Do not delete it, and do not add it here.
 
 %description
 This is a stupid (but extremely fast) directory content manager.  It
